@@ -51,3 +51,11 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 
 # Kotlin-compose
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+# Kotlin jvm
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+
+# build-logic
+libertyflow-android-application = { id = "libertyflow.android.application" }
+libertyflow-kotlin-library = { id = "libertyflow.kotlin.library" }
+libertyflow-android-library = { id = "libertyflow.android.library" }
