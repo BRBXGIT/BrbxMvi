@@ -1,0 +1,36 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+    <rect
+        x="24"
+        y="24"
+        width="208"
+        height="208"
+        rx="56"
+        fill="#F6F2FF"/>
+
+    <path
+        d="M88 84
+         C88 120 120 128 128 128
+         C136 128 168 136 168 172"
+        stroke="#6750A4"
+        stroke-width="18"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+    <path
+        d="M168 84
+         C168 120 136 128 128 128
+         C120 128 88 136 88 172"
+        stroke="#6750A4"
+        stroke-width="18"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+    <!-- State / Store -->
+    <circle
+        cx="128"
+        cy="128"
+        r="16"
+        fill="#E4698A"/>
+
+</svg>
