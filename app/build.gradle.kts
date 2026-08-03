@@ -1,6 +1,6 @@
 plugins {
     // Android Application
-    alias(libs.plugins.libertyflow.android.application)
+    alias(libs.plugins.brbxmvi.android.application)
 }
 
 dependencies {

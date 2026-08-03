@@ -21,6 +21,7 @@ local.properties
 .gradle/
 /build/
 */build/
+/build
 
 # Kapt/ksp files
 /app/build/generated/source/kapt/
@@ -40,7 +41,7 @@ local.properties
 keystore.properties
 play-store-credentials.json
 
-# Services configurations(Firebase etc.)
+# Services configurations (Firebase etc.)
 google-services.json
 agconnect-services.json
 

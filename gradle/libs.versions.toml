@@ -11,6 +11,9 @@ lifecycleRuntimeKtx = "2.11.0"
 # Kotlin
 kotlin = "2.4.10"
 
+# Coroutines
+kotlinxCoroutinesCore = "1.11.0"
+
 # Compose
 composeBom = "2026.06.01"
 activityCompose = "1.13.0"
@@ -26,6 +29,12 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 # build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
+# Coroutines
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+
+# ViewModel
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycleRuntimeKtx" }
 
 # Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -56,6 +65,6 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 # build-logic
-libertyflow-android-application = { id = "libertyflow.android.application" }
-libertyflow-kotlin-library = { id = "libertyflow.kotlin.library" }
-libertyflow-android-library = { id = "libertyflow.android.library" }
+brbxmvi-android-application = { id = "brbxmvi.android.application" }
+brbxmvi-kotlin-library = { id = "brbxmvi.kotlin.library" }
+brbxmvi-android-library = { id = "brbxmvi.android.library" }

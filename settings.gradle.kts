@@ -24,4 +24,10 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "BrbxMvi"
+
+// App
 include(":app")
+
+// Mvi
+include(":brbx-mvi")
+include(":brbx-mvi:api")
