@@ -1,0 +1,53 @@
+package com.brbx.api.helpers.helpers
+
+import com.brbx.api.contracts.MviDelegate
+import com.brbx.api.contracts.MviScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlin.coroutines.EmptyCoroutineContext
+
+class TestMviDelegate<S, E, I : Any>(
+    initialState: S,
+    override val scope: TestMviScope<S, E, I> = TestMviScope(initialState)
+) : MviDelegate<S, E, I> {
+
+    val intents = mutableListOf<I>()
+
+    override fun process(intent: I) {
+        intents.add(intent)
+    }
+
+    class TestMviScope<S, E, I : Any>(
+        initialState: S,
+        override val viewModelScope: CoroutineScope = CoroutineScope(EmptyCoroutineContext)
+    ) : MviScope<S, E, I> {
+
+        private val _state = MutableStateFlow(initialState)
+        override val state: StateFlow<S> = _state.asStateFlow()
+
+        private val _effects = MutableSharedFlow<E>()
+        override val effects: SharedFlow<E> = _effects.asSharedFlow()
+
+        val dispatchedIntents = mutableListOf<I>()
+        val postedEffects = mutableListOf<E>()
+
+        override fun reduce(reducer: S.() -> S) {
+            _state.value = reducer(_state.value)
+        }
+
+        override fun dispatchIntent(intent: I) {
+            dispatchedIntents.add(intent)
+        }
+
+        override fun postEffect(effect: E) {
+            postedEffects.add(effect)
+            // Note: SharedFlow might not collect if not subscribed, 
+            // but we track in postedEffects for verification
+        }
+    }
+}
