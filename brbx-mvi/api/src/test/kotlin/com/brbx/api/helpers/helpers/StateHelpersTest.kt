@@ -1,5 +1,6 @@
 package com.brbx.api.helpers.helpers
 
+import com.brbx.api.helpers.MviApiWithIf
 import com.brbx.api.helpers.currentState
 import com.brbx.api.helpers.reduce
 import com.brbx.api.helpers.reduceIf
@@ -9,6 +10,7 @@ import com.brbx.api.helpers.withState
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
+@OptIn(MviApiWithIf::class)
 internal class StateHelpersTest {
 
     internal data class TestState(val count: Int = 0, val text: String = "")

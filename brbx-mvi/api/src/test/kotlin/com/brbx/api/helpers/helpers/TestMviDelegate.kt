@@ -12,9 +12,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlin.coroutines.EmptyCoroutineContext
 
 internal class TestMviDelegate<S, E, I : Any>(
-    initialState: S,
-    override val scope: TestMviScope<S, E, I> = TestMviScope(initialState)
+    override val scope: TestMviScope<S, E, I>
 ) : MviDelegate<S, E, I> {
+
+    constructor(
+        initialState: S,
+        viewModelScope: CoroutineScope = CoroutineScope(EmptyCoroutineContext)
+    ) : this(TestMviScope(initialState, viewModelScope))
 
     val intents = mutableListOf<I>()
 

@@ -6,7 +6,12 @@ fun <E> MviDelegate<*, E, *>.postEffect(
     effect: E,
 ) = scope.postEffect(effect)
 
+@MviApiWithIf
 fun <E> MviDelegate<*, E, *>.postEffectIf(
     effect: E,
     condition: Boolean,
-): Unit? = if (condition) postEffect(effect) else null
+    onElse: () -> Unit = {},
+): Unit? = if (condition) postEffect(effect) else {
+    onElse()
+    null
+}

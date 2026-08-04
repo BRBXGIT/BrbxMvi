@@ -1,11 +1,13 @@
 package com.brbx.api.helpers.helpers
 
+import com.brbx.api.helpers.MviApiWithIf
 import com.brbx.api.helpers.dispatchIntent
 import com.brbx.api.helpers.dispatchIntentIf
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
+@OptIn(MviApiWithIf::class)
 internal class IntentHelpersTest {
 
     internal sealed interface TestIntent {

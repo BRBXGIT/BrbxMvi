@@ -1,15 +1,17 @@
 package com.brbx.api.helpers.helpers
 
-import com.brbx.api.helpers.asyncTask
-import com.brbx.api.helpers.asyncTaskIf
-import com.brbx.api.helpers.launchTask
-import com.brbx.api.helpers.launchTaskIf
+import com.brbx.api.helpers.MviApiWithIf
+import com.brbx.api.helpers.asyncAction
+import com.brbx.api.helpers.asyncActionIf
+import com.brbx.api.helpers.launchAction
+import com.brbx.api.helpers.launchActionIf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
 
+@OptIn(MviApiWithIf::class)
 internal class CoroutineHelpersTest {
 
     @Test
@@ -17,7 +19,7 @@ internal class CoroutineHelpersTest {
         val delegate = TestMviDelegate<Unit, Unit, Any>(Unit)
         var executed = false
         
-        val job = delegate.launchTask {
+        val job = delegate.launchAction {
             executed = true
         }
         job.join()
@@ -30,12 +32,12 @@ internal class CoroutineHelpersTest {
         val delegate = TestMviDelegate<Unit, Unit, Any>(Unit)
         var executedCount = 0
         
-        val job1 = delegate.launchTaskIf(condition = false) {
+        val job1 = delegate.launchActionIf(condition = false) {
             executedCount++
         }
         assertNull(job1)
         
-        val job2 = delegate.launchTaskIf(condition = true) {
+        val job2 = delegate.launchActionIf(condition = true) {
             executedCount++
         }
         assertNotNull(job2)
@@ -48,7 +50,7 @@ internal class CoroutineHelpersTest {
     fun `asyncTask returns result from block`() = runTest {
         val delegate = TestMviDelegate<Unit, Unit, Any>(Unit)
         
-        val deferred = delegate.asyncTask {
+        val deferred = delegate.asyncAction {
             "result"
         }
         
@@ -59,12 +61,12 @@ internal class CoroutineHelpersTest {
     fun `asyncTaskIf returns deferred only when condition is true`() = runTest {
         val delegate = TestMviDelegate<Unit, Unit, Any>(Unit)
         
-        val deferred1 = delegate.asyncTaskIf(condition = false) {
+        val deferred1 = delegate.asyncActionIf(condition = false) {
             "ignored"
         }
         assertNull(deferred1)
         
-        val deferred2 = delegate.asyncTaskIf(condition = true) {
+        val deferred2 = delegate.asyncActionIf(condition = true) {
             "success"
         }
         assertNotNull(deferred2)

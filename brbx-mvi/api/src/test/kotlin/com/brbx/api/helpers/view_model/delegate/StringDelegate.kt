@@ -1,7 +1,7 @@
 package com.brbx.api.helpers.view_model.delegate
 
 import com.brbx.api.contracts.MviScope
-import com.brbx.api.helpers.launchTask
+import com.brbx.api.helpers.launchAction
 import com.brbx.api.helpers.reduce
 import com.brbx.api.helpers.view_model.vm.TestEffect
 import com.brbx.api.helpers.view_model.vm.TestIntent
@@ -25,14 +25,14 @@ internal class StringDelegateImpl(
     }
 
     private fun addMvi() {
-        launchTask(context = dispatcher) {
+        launchAction(context = dispatcher) {
             delay(duration = 2_000.milliseconds)
             reduce { copy(string = string + "Mvi") }
         }
     }
 
     private fun removeMvi() {
-        launchTask(context = dispatcher) {
+        launchAction(context = dispatcher) {
             delay(duration = 2_000.milliseconds)
             reduce { copy(string = string.removeSuffix("Mvi")) }
         }

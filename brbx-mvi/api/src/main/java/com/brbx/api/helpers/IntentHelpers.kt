@@ -6,6 +6,11 @@ fun <I : Any> MviDelegate<*, *, I>.dispatchIntent(intent: I) {
     scope.dispatchIntent(intent)
 }
 
-fun <I : Any> MviDelegate<*, *, I>.dispatchIntentIf(intent: I, condition: Boolean) {
-    if (condition) dispatchIntent(intent)
+@MviApiWithIf
+fun <I : Any> MviDelegate<*, *, I>.dispatchIntentIf(
+    intent: I,
+    condition: Boolean,
+    onElse: () -> Unit = {},
+) {
+    if (condition) dispatchIntent(intent) else onElse()
 }

@@ -65,46 +65,104 @@ fun <T> Flow<T>.shareInWhileSubscribed(stopTimeoutMillis: Long = 1L): SharedFlow
     )
 
 context(delegate: MviDelegate<S, E, I>)
-inline fun <S, E, I : Any, T> Flow<T>.collectTask(
+inline fun <S, E, I : Any, T> Flow<T>.collectFlow(
     context: CoroutineContext = EmptyCoroutineContext,
     crossinline action: suspend MviDelegate<S, E, I>.(T) -> Unit
 ): Job =
-    delegate.launchTask(context = context) {
-        this@collectTask.collect { value ->
+    delegate.launchAction(context = context) {
+        this@collectFlow.collect { value ->
             delegate.action(value)
         }
     }
 
+@MviApiWithIf
 context(delegate: MviDelegate<S, E, I>)
-inline fun <S, E, I : Any, T> Flow<T>.collectTaskIf(
+inline fun <S, E, I : Any, T> Flow<T>.collectFlowIf(
     condition: Boolean,
+    onElse: () -> Unit = {},
     context: CoroutineContext = EmptyCoroutineContext,
     crossinline action: suspend MviDelegate<S, E, I>.(T) -> Unit
 ): Job? =
     if (condition) {
-        collectTask(context, action)
-    } else null
+        collectFlow(context, action)
+    } else {
+        onElse()
+        null
+    }
 
 context(delegate: MviDelegate<S, E, I>)
-inline fun <S, E, I : Any, T> Flow<T>.collectLatestTask(
+inline infix fun <S, E, I : Any, T> Flow<T>.bind(
+    crossinline reducer: S.(T) -> S,
+): Job =
+    collectFlow { value ->
+        reduce {
+            reducer(value)
+        }
+    }
+
+@MviApiWithIf
+context(delegate: MviDelegate<S, E, I>)
+inline fun <S, E, I : Any, T> Flow<T>.bindIf(
+    condition: Boolean,
+    onElse: () -> Unit = {},
+    crossinline reducer: S.(T) -> S,
+): Job? =
+    if (condition) {
+        bind(reducer)
+    } else {
+        onElse()
+        null
+    }
+
+context(delegate: MviDelegate<S, E, I>)
+inline fun <S, E, I : Any, T> Flow<T>.collectFlowLatest(
     context: CoroutineContext = EmptyCoroutineContext,
     crossinline action: suspend MviDelegate<S, E, I>.(T) -> Unit
 ): Job =
-    delegate.launchTask(context = context) {
-        this@collectLatestTask.collectLatest { value ->
+    delegate.launchAction(context = context) {
+        this@collectFlowLatest.collectLatest { value ->
             delegate.action(value)
         }
     }
 
+@MviApiWithIf
 context(delegate: MviDelegate<S, E, I>)
-inline fun <S, E, I : Any, T> Flow<T>.collectLatestTaskIf(
+inline fun <S, E, I : Any, T> Flow<T>.collectFlowLatestIf(
     condition: Boolean,
+    onElse: () -> Unit = {},
     context: CoroutineContext = EmptyCoroutineContext,
     crossinline action: suspend MviDelegate<S, E, I>.(T) -> Unit
 ): Job? =
     if (condition) {
-        collectTask(context, action)
-    } else null
+        collectFlow(context, action)
+    } else {
+        onElse()
+        null
+    }
+
+context(delegate: MviDelegate<S, E, I>)
+inline infix fun <S, E, I : Any, T> Flow<T>.bindLatest(
+    crossinline reducer: S.(T) -> S,
+): Job =
+    collectFlowLatest { value ->
+        reduce {
+            reducer(value)
+        }
+    }
+
+@MviApiWithIf
+context(delegate: MviDelegate<S, E, I>)
+inline fun <S, E, I : Any, T> Flow<T>.bindLatestIf(
+    condition: Boolean,
+    onElse: () -> Unit = {},
+    crossinline reducer: S.(T) -> S,
+): Job? =
+    if (condition) {
+        bindLatest(reducer)
+    } else {
+        onElse()
+        null
+    }
 
 fun <S, E, I : Any, T> MviDelegate<S, E, I>.selectFlow(
     selector: (S) -> T

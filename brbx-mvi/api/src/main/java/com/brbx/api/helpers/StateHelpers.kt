@@ -22,18 +22,19 @@ fun <S, E, I : Any> MviDelegate<S, E, I>.reduce(
     scope.reduce(reducer)
 }
 
+@MviApiWithIf
 fun <S, E, I : Any> MviDelegate<S, E, I>.reduceIf(
     condition: Boolean,
+    onElse: () -> Unit = {},
     reducer: S.() -> S
 ) {
-    if (condition) reduce(reducer)
+    if (condition) reduce(reducer) else onElse()
 }
 
 inline fun <reified T : S, S, E, I : Any> MviDelegate<S, E, I>.reduceIfType(
     crossinline reducer: T.() -> S
 ) {
-    val state = currentState
-    if (state is T) {
-        reduce { reducer(state) }
+    reduce {
+        if (this is T) reducer(this) else this
     }
 }
