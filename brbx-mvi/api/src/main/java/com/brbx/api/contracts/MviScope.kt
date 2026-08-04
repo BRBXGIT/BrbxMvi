@@ -2,7 +2,6 @@ package com.brbx.api.contracts
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.brbx.api.base.BrbxViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -52,16 +51,4 @@ fun <State, Effect, Intent : Any> ViewModel.mviScope(
         onReduce = reduce,
         onDispatchIntent = dispatchIntent,
         onPostEffect = postEffect,
-    )
-
-fun <State, Effect, Intent : Any> BrbxViewModel<State, Effect, Intent>.mviScope(
-    reduce: (State.() -> State) -> Unit,
-) : MviScope<State, Effect, Intent> =
-    DefaultMviScope(
-        viewModelScope = viewModelScope,
-        state = state,
-        effects = effects,
-        onReduce = reduce,
-        onDispatchIntent = { i -> dispatchIntent(i) },
-        onPostEffect = { e -> postEffect(e) },
     )

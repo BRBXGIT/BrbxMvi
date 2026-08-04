@@ -2,12 +2,15 @@ package com.brbx.api.helpers
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.brbx.api.contracts.BrbxMviDelegate
+import com.brbx.api.contracts.MviDelegate
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlin.coroutines.CoroutineContext
@@ -61,10 +64,10 @@ fun <T> Flow<T>.shareInWhileSubscribed(stopTimeoutMillis: Long = 1L): SharedFlow
         started = SharingStarted.WhileSubscribed(stopTimeoutMillis = stopTimeoutMillis),
     )
 
-context(delegate: BrbxMviDelegate<S, E, I>)
+context(delegate: MviDelegate<S, E, I>)
 inline fun <S, E, I : Any, T> Flow<T>.collectTask(
     context: CoroutineContext = EmptyCoroutineContext,
-    crossinline action: suspend BrbxMviDelegate<S, E, I>.(T) -> Unit
+    crossinline action: suspend MviDelegate<S, E, I>.(T) -> Unit
 ): Job =
     delegate.launchTask(context = context) {
         this@collectTask.collect { value ->
@@ -72,12 +75,37 @@ inline fun <S, E, I : Any, T> Flow<T>.collectTask(
         }
     }
 
-context(delegate: BrbxMviDelegate<S, E, I>)
+context(delegate: MviDelegate<S, E, I>)
 inline fun <S, E, I : Any, T> Flow<T>.collectTaskIf(
     condition: Boolean,
     context: CoroutineContext = EmptyCoroutineContext,
-    crossinline action: suspend BrbxMviDelegate<S, E, I>.(T) -> Unit
+    crossinline action: suspend MviDelegate<S, E, I>.(T) -> Unit
 ): Job? =
     if (condition) {
         collectTask(context, action)
     } else null
+
+context(delegate: MviDelegate<S, E, I>)
+inline fun <S, E, I : Any, T> Flow<T>.collectLatestTask(
+    context: CoroutineContext = EmptyCoroutineContext,
+    crossinline action: suspend MviDelegate<S, E, I>.(T) -> Unit
+): Job =
+    delegate.launchTask(context = context) {
+        this@collectLatestTask.collectLatest { value ->
+            delegate.action(value)
+        }
+    }
+
+context(delegate: MviDelegate<S, E, I>)
+inline fun <S, E, I : Any, T> Flow<T>.collectLatestTaskIf(
+    condition: Boolean,
+    context: CoroutineContext = EmptyCoroutineContext,
+    crossinline action: suspend MviDelegate<S, E, I>.(T) -> Unit
+): Job? =
+    if (condition) {
+        collectTask(context, action)
+    } else null
+
+fun <S, E, I : Any, T> MviDelegate<S, E, I>.selectFlow(
+    selector: (S) -> T
+): Flow<T> = scope.state.map(transform = selector).distinctUntilChanged()
