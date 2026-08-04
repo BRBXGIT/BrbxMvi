@@ -19,9 +19,7 @@ local.properties
 
 # Gradle and caches
 .gradle/
-/build/
-*/build/
-/build
+build/
 
 # Kapt/ksp files
 /app/build/generated/source/kapt/
