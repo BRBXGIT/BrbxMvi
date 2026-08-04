@@ -11,27 +11,23 @@ lifecycleRuntimeKtx = "2.11.0"
 # Kotlin
 kotlin = "2.4.10"
 
-# Coroutines
-kotlinxCoroutinesCore = "1.11.0"
-
 # Compose
 composeBom = "2026.06.01"
 activityCompose = "1.13.0"
 material3Android = "1.5.0-alpha25"
 
+# Testing
+coroutines = "1.8.1"
+turbine = "1.1.0"
+junit = "4.13.2"
+
 [libraries]
 # Core
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
-# Lifecycle
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-
 # build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-
-# Coroutines
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 
 # ViewModel
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycleRuntimeKtx" }
@@ -42,6 +38,11 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3-android", version.ref = "material3Android" }
+
+# Testing
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+junit = { module = "junit:junit", version.ref = "junit" }
 
 [bundles]
 compose-core = [
