@@ -4,15 +4,13 @@ import com.brbx.api.helpers.asyncTask
 import com.brbx.api.helpers.asyncTaskIf
 import com.brbx.api.helpers.launchTask
 import com.brbx.api.helpers.launchTaskIf
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
-class CoroutineHelpersTest {
+internal class CoroutineHelpersTest {
 
     @Test
     fun `launchTask executes block`() = runTest {

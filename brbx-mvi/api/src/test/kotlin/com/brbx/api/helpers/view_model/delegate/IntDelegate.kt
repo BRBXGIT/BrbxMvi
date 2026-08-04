@@ -6,10 +6,10 @@ import com.brbx.api.helpers.view_model.vm.TestEffect
 import com.brbx.api.helpers.view_model.vm.TestIntent
 import com.brbx.api.helpers.view_model.vm.TestState
 
-interface IntDelegate : TestDelegate<TestIntent.IntIntent>
+internal interface IntDelegate : TestDelegate<TestIntent.IntIntent>
 
-class IntDelegateImpl(
-    override val scope: MviScope<TestState, TestEffect, TestIntent.IntIntent>,
+internal class IntDelegateImpl(
+    override val scope: MviScope<TestState, TestEffect, TestIntent>,
 ) : IntDelegate {
 
     override fun process(intent: TestIntent.IntIntent) {

@@ -9,9 +9,9 @@ import com.brbx.api.helpers.withState
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class StateHelpersTest {
+internal class StateHelpersTest {
 
-    data class TestState(val count: Int = 0, val text: String = "")
+    internal data class TestState(val count: Int = 0, val text: String = "")
 
     @Test
     fun `currentState returns actual state from scope`() {
@@ -55,9 +55,9 @@ class StateHelpersTest {
         assertEquals(2, delegate.currentState.count)
     }
 
-    interface State
-    data class TypeA(val valA: String) : State
-    data class TypeB(val valB: Int) : State
+    internal interface State
+    internal data class TypeA(val valA: String) : State
+    internal data class TypeB(val valB: Int) : State
 
     @Test
     fun `reduceIfType updates state only when type matches`() {

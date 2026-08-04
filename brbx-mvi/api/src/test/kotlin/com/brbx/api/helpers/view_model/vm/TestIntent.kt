@@ -1,6 +1,6 @@
 package com.brbx.api.helpers.view_model.vm
 
-sealed interface TestIntent {
+internal sealed interface TestIntent {
     sealed interface IntIntent : TestIntent {
         data object PlusOne : IntIntent
         data object MinusOne : IntIntent

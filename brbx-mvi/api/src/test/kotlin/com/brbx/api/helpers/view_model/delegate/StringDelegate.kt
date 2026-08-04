@@ -10,10 +10,10 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
-interface StringDelegate : TestDelegate<TestIntent.StringIntent>
+internal interface StringDelegate : TestDelegate<TestIntent.StringIntent>
 
-class StringDelegateImpl(
-    override val scope: MviScope<TestState, TestEffect, TestIntent.StringIntent>,
+internal class StringDelegateImpl(
+    override val scope: MviScope<TestState, TestEffect, TestIntent>,
     private val dispatcher: CoroutineDispatcher,
 ) : StringDelegate {
 

@@ -6,9 +6,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class IntentHelpersTest {
+internal class IntentHelpersTest {
 
-    sealed interface TestIntent {
+    internal sealed interface TestIntent {
         data object Intent1 : TestIntent
         data object Intent2 : TestIntent
     }

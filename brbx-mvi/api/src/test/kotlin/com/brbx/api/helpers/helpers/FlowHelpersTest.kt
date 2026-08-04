@@ -10,7 +10,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class FlowHelpersTest {
+internal class FlowHelpersTest {
 
     @Test
     fun `selectFlow transforms state flow`() = runTest {

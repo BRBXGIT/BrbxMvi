@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlin.coroutines.EmptyCoroutineContext
 
-class TestMviDelegate<S, E, I : Any>(
+internal class TestMviDelegate<S, E, I : Any>(
     initialState: S,
     override val scope: TestMviScope<S, E, I> = TestMviScope(initialState)
 ) : MviDelegate<S, E, I> {
@@ -22,7 +22,7 @@ class TestMviDelegate<S, E, I : Any>(
         intents.add(intent)
     }
 
-    class TestMviScope<S, E, I : Any>(
+    internal class TestMviScope<S, E, I : Any>(
         initialState: S,
         override val viewModelScope: CoroutineScope = CoroutineScope(EmptyCoroutineContext)
     ) : MviScope<S, E, I> {

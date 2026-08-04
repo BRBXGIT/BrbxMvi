@@ -6,9 +6,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class EffectHelpersTest {
+internal class EffectHelpersTest {
 
-    sealed interface TestEffect {
+    internal sealed interface TestEffect {
         data object Effect1 : TestEffect
         data object Effect2 : TestEffect
     }
