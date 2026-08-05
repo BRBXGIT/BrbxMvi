@@ -31,7 +31,7 @@ Add the following to your module's `build.gradle.kts`:
 ```kotlin
 dependencies {
     // Replace 'latest_tag' with the actual version (e.g., 1.0.0)
-    implementation("com.github.BRBXGIT.BrbxMvi:brbx-mvi-api:latest_tag")
+    implementation("com.github.BRBXGIT:BrbxMvi:latest_tag")
 }
 ```
 
