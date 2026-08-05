@@ -1,6 +1,8 @@
-# <img src="docs/logo.svg" width="40" height="40" valign="middle"/> BrbxMvi
+# <img src="docs/logo.svg" width="50" height="50" valign="middle"/> BrbxMvi
 
 **BrbxMvi** is a lightweight, scalable, and developer-friendly MVI (Model-View-Intent) framework for Android. It is designed to minimize boilerplate while providing a powerful DSL for state management and side effects, with a strong focus on **logic composition through delegates**.
+
+[![](https://jitpack.io/v/BRBXGIT/BrbxMvi.svg)](https://jitpack.io/#BRBXGIT/BrbxMvi)
 
 ---
 

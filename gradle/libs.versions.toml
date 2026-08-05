@@ -17,8 +17,8 @@ activityCompose = "1.13.0"
 material3Android = "1.5.0-alpha25"
 
 # Testing
-coroutines = "1.8.1"
-turbine = "1.1.0"
+coroutines = "1.11.0"
+turbine = "1.2.1"
 junit = "4.13.2"
 
 [libraries]
