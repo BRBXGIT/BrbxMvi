@@ -1,7 +1,6 @@
 package com.brbx.convention.config
 
 import com.android.build.api.dsl.CommonExtension
-import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 
 internal fun Project.configureAndroidCommon(
@@ -22,8 +21,8 @@ internal fun Project.configureAndroidCommon(
         defaultConfig.minSdk = 28
 
         compileOptions.apply {
-            sourceCompatibility = JavaVersion.VERSION_17
-            targetCompatibility = JavaVersion.VERSION_17
+            sourceCompatibility = JavaVersions.JavaV
+            targetCompatibility = JavaVersions.JavaV
         }
     }
 }

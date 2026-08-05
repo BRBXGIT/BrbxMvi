@@ -38,5 +38,10 @@ gradlePlugin {
             id = libs.plugins.brbxmvi.android.library.get().pluginId
             implementationClass = "com.brbx.convention.AndroidLibraryConventionPlugin"
         }
+
+        register("publish") {
+            id = libs.plugins.brbxmvi.publish.get().pluginId
+            implementationClass = "com.brbx.convention.PublishConventionPlugin"
+        }
     }
 }

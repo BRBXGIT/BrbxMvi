@@ -1,9 +1,8 @@
 plugins {
+    // Kotlin lib
     alias(libs.plugins.brbxmvi.kotlin.library)
-}
-
-tasks.test {
-    useJUnit()
+    // Publish
+    alias(libs.plugins.brbxmvi.publish)
 }
 
 dependencies {

@@ -69,3 +69,4 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin"
 brbxmvi-android-application = { id = "brbxmvi.android.application" }
 brbxmvi-kotlin-library = { id = "brbxmvi.kotlin.library" }
 brbxmvi-android-library = { id = "brbxmvi.android.library" }
+brbxmvi-publish = { id = "brbxmvi.publish" }
