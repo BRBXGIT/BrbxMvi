@@ -6,13 +6,40 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * A scope that provides all necessary tools to interact with an MVI component.
+ *
+ * It serves as a bridge between the ViewModel (the producer) and delegates or UI (the consumers/logic providers).
+ */
 interface MviScope<State, Effect, in Intent : Any> {
+    /**
+     * The [CoroutineScope] tied to the ViewModel's lifecycle.
+     */
     val viewModelScope: CoroutineScope
+
+    /**
+     * A [StateFlow] of the current state.
+     */
     val state: StateFlow<State>
+
+    /**
+     * A [SharedFlow] of effects.
+     */
     val effects: SharedFlow<Effect>
 
+    /**
+     * Updates the state via a reducer function.
+     */
     fun reduce(reducer: State.() -> State)
+
+    /**
+     * Dispatches an intent to the MVI system.
+     */
     fun dispatchIntent(intent: Intent)
+
+    /**
+     * Posts a one-time effect.
+     */
     fun postEffect(effect: Effect)
 }
 
@@ -37,6 +64,10 @@ private class DefaultMviScope<State, Effect, in Intent : Any>(
     }
 }
 
+/**
+ * Factory function to create an [MviScope] from individual components.
+ * Useful for custom ViewModel implementations or when delegating MVI logic.
+ */
 fun <State, Effect, Intent : Any> ViewModel.mviScope(
     state: StateFlow<State>,
     effects: SharedFlow<Effect>,
