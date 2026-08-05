@@ -28,6 +28,6 @@ rootProject.name = "BrbxMvi"
 // App
 include(":app")
 
-// Mvi
-include(":brbx-mvi")
-include(":brbx-mvi:api")
+// Mvi core
+include(":mvi-core")
+include(":mvi-core:api")
