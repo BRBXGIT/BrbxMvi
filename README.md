@@ -1,6 +1,8 @@
 # <img src="docs/logo.svg" width="50" height="50" valign="middle"/> BrbxMvi
 
-**BrbxMvi** is a lightweight, scalable, and developer-friendly MVI (Model-View-Intent) framework for Android. It is designed to minimize boilerplate while providing a powerful DSL for state management and side effects, with a strong focus on **logic composition through delegates**.
+**BrbxMvi** is a simple and straightforward MVI (Model-View-Intent) library for Android. It is designed to be convenient and easy to use, providing a small set of tools to manage state and side effects without excessive boilerplate. 
+
+Its main focus is on **logic composition**, allowing you to split your business logic into small, reusable delegates that handle specific parts of your intent hierarchy.
 
 [![](https://jitpack.io/v/BRBXGIT/BrbxMvi.svg)](https://jitpack.io/#BRBXGIT/BrbxMvi)
 
@@ -35,159 +37,163 @@ dependencies {
 
 ---
 
-## 🚀 Key Features
+## Highlights
 
--   **Logic Delegation:** Break down massive ViewModels into small, testable, and reusable `MviDelegate` components.
--   **Reactive DSL:** Clean and expressive API for state updates (`reduce`), side effects (`postEffect`), and flow binding (`bind`).
--   **Transitive ViewModel Access:** Delegates automatically get access to the `viewModelScope` and MVI loop.
--   **DI Ready:** Seamless integration with Hilt, Dagger, or Koin.
--   **Lightweight:** No heavy dependencies, built purely on Kotlin Coroutines and Flow.
+-   **Logic Delegation:** Easily split large ViewModels into small, testable `MviDelegate` components.
+-   **Sealed Intent Hierarchy:** Use nested sealed interfaces to organize intents into logical groups.
+-   **Simple DSL:** Concise API for state updates (`reduce`), side effects (`postEffect`), and flow binding (`bind`).
+-   **ViewModel Integration:** Delegates automatically get access to the `viewModelScope` and the shared MVI loop.
+-   **DI Friendly:** Designed to work seamlessly with Hilt, Dagger, or Koin using interface-based delegation.
 
 ---
 
-## 🏗 Core Architecture
+## How it works
 
-In BrbxMvi, your ViewModel doesn't have to be a monolith. You can split business logic into **Delegates**.
+The core idea is to keep your ViewModel clean by moving business logic into **Delegates**. Each delegate handles a specific branch of your intent hierarchy.
 
-### 1. The ViewModel (Container)
-The ViewModel holds the state and acts as the entry point for intents. Delegates are injected via factories to receive the ViewModel's scope.
+### 1. The Intent Hierarchy
+Organize your intents using nested sealed interfaces. This creates a "ladder" that allows delegates to handle only what they need.
 
 ```kotlin
-class MyViewModel(
-    authDelegateFactory: AuthDelegate.Factory
-) : ContainedMviViewModel<MyState, MyEffect, MyIntent>(
-    initialState = MyState()
-) {
-    // Delegate created using the ViewModel's scope
-    private val authDelegate = authDelegateFactory.create(scope)
-
-    override fun dispatchIntent(intent: MyIntent) {
-        when (intent) {
-            is MyIntent.Auth -> authDelegate.process(intent)
-            // handle other intents
-        }
+sealed interface MainIntent {
+    sealed interface Auth : MainIntent {
+        data class Login(val user: String, val pass: String) : Auth
+        data object Logout : Auth
     }
+    // Other sub-intents...
 }
 ```
 
-### 2. The Delegate (Logic Unit)
-Delegates implement `MviDelegate`. They share the same `MviScope` as the ViewModel, meaning they can update state and post effects as if they were part of the ViewModel itself.
+### 2. The Delegate (Interface & Implementation)
+Define your delegate as an interface. This makes it easy to mock for tests and inject via DI.
 
 ```kotlin
-class AuthDelegate(
-    override val scope: MviScope<MyState, MyEffect, MyIntent>
-) : MviDelegate<MyState, MyEffect, MyIntent> {
+interface AuthDelegate : MviDelegate<MyState, MyEffect, MainIntent.Auth>
 
-    override fun process(intent: MyIntent) {
-        if (intent is MyIntent.Auth.Login) {
-            login(intent.user, intent.pass)
+class AuthDelegateImpl(
+    override val scope: MviScope<MyState, MyEffect, MainIntent>
+) : AuthDelegate {
+
+    override fun process(intent: MainIntent.Auth) {
+        when (intent) {
+            is MainIntent.Auth.Login -> login(intent.user, intent.pass)
+            is MainIntent.Auth.Logout -> { /* handle logout */ }
         }
     }
 
     private fun login(u: String, p: String) = launchAction {
         reduce { copy(isLoading = true) }
-        val result = repository.login(u, p)
-        reduce { copy(isLoading = false, user = result) }
-        postEffect(MyEffect.ShowToast("Welcome!"))
+        // ... business logic ...
+        reduce { copy(isLoading = false) }
+        postEffect(MyEffect.ShowToast("Success"))
     }
-    
-    interface Factory {
-        fun create(scope: MviScope<MyState, MyEffect, MyIntent>): AuthDelegate
+}
+```
+
+### 3. The ViewModel (Container)
+The ViewModel acts as the container. It dispatches top-level intents to the appropriate delegates by checking their type.
+
+```kotlin
+class MyViewModel(
+    authDelegateFactory: AuthDelegateFactory // Custom factory for the interface
+) : ContainedMviViewModel<MyState, MyEffect, MainIntent>(
+    initialState = MyState()
+) {
+    // Create the delegate implementation through the factory using the VM scope
+    private val authDelegate = authDelegateFactory.create(scope)
+
+    override fun dispatchIntent(intent: MainIntent) {
+        when (intent) {
+            is MainIntent.Auth -> authDelegate.process(intent)
+            // handle other intent branches...
+        }
     }
 }
 ```
 
 ---
 
-## 💉 Dependency Injection
+## Dependency Injection
 
 ### Hilt / Dagger
-When using Hilt or Dagger, you typically use a factory or assisted injection to provide the `MviScope` to your delegates.
+Use a factory or assisted injection to provide the `MviScope` to your delegate implementation.
 
 ```kotlin
 class MyViewModel @Inject constructor(
-    delegateFactory: MyDelegate.Factory
-) : ContainedMviViewModel<State, Effect, Intent>(...) {
+    authDelegateFactory: AuthDelegateFactory
+) : ContainedMviViewModel<State, Effect, MainIntent>(...) {
     
-    private val delegate = delegateFactory.create(scope) // 'scope' is provided by ContainedMviViewModel
+    private val authDelegate = authDelegateFactory.create(scope) 
 }
 ```
 
 ### Koin
-Koin allows you to inject delegates directly into your ViewModel using parameters to pass the scope.
+In Koin, you can provide the delegate as an interface and inject it lazily into your ViewModel by passing the scope as a parameter.
 
 ```kotlin
 val myModule = module {
-    factory { (scope: MviScope<S, E, I>) -> MyDelegate(scope) }
+    factory<AuthDelegate> { (scope: MviScope<S, E, I>) -> AuthDelegateImpl(scope) }
     viewModel { MyViewModel() }
 }
 
-class MyViewModel : ContainedMviViewModel<State, Effect, Intent>(...), KoinComponent {
-    // Inject delegate lazily using the ViewModel's scope
-    private val delegate: MyDelegate by inject { parametersOf(scope) }
+class MyViewModel : ContainedMviViewModel<State, Effect, MainIntent>(...), KoinComponent {
+    // Lazily inject the delegate interface using the ViewModel's scope
+    private val authDelegate: AuthDelegate by inject { parametersOf(scope) }
 
-    override fun dispatchIntent(intent: Intent) {
-        delegate.process(intent)
+    override fun dispatchIntent(intent: MainIntent) {
+        when (intent) {
+            is MainIntent.Auth -> authDelegate.process(intent)
+        }
     }
 }
 ```
 
 ---
 
-## 🛠 Powerful Helpers (The DSL)
+## Useful Helpers
 
-BrbxMvi provides a set of extension functions to make your code more readable.
+BrbxMvi includes a few extensions to make common tasks a bit easier.
 
-### State Management
+### State Updates
 ```kotlin
-// Update state
+// Basic update
 reduce { copy(count = count + 1) }
 
-// Conditional update (experimental)
-reduceIf(condition) { copy(someFlag = true) }
-
-// Typed reduction for sealed classes
+// Type-safe reduction (useful for sealed state classes)
 reduceIfType<State.Success> { copy(data = newData) }
+
+// Access current state
+val current = currentState
+withState { state -> /* do something with state */ }
 ```
 
-### Reactive Binding
-Easily bind external `Flows` to your state:
+### Coroutine Actions
 ```kotlin
-// Automatically updates state whenever the flow emits
+// Launch a coroutine in the ViewModel scope
+launchAction {
+    val data = repository.fetchData()
+    reduce { copy(data = data) }
+}
+
+// Conditionally launch an action
+launchActionIf(condition) {
+    // ...
+}
+
+// Compute an asynchronous value
+val deferred = asyncAction { repository.computeValue() }
+val result = deferred.await()
+```
+
+### Flow Binding
+```kotlin
+// Automatically updates state for every flow emission
 repository.observeData() bind { data -> 
     copy(items = data) 
 }
 
-// Bind only the latest emission
+// Only collects the latest emission, cancelling previous ones
 searchQueryFlow bindLatest { query ->
     copy(results = performSearch(query))
 }
-```
-
-### Side Effects & Actions
-```kotlin
-// Post a one-time event (Effect)
-postEffect(Effect.NavigateToProfile)
-
-// Launch a coroutine in ViewModelScope
-launchAction {
-    // suspension point
-}
-
-// Async computation
-val result = asyncAction { fetchData() }.await()
-```
-
----
-
-## 📄 License
-
-```text
-Copyright 2026 BrbxMvi
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
 ```
