@@ -152,7 +152,7 @@ class MyViewModel : ContainedMviViewModel<State, Effect, MainIntent>(...), KoinC
 
 ## Useful Helpers
 
-BrbxMvi includes a few extensions to make common tasks a bit easier.
+BrbxMvi includes a few extensions to make common tasks a bit easier here if some of them:
 
 ### State Updates
 ```kotlin
