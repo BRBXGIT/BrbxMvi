@@ -6,6 +6,35 @@
 
 ---
 
+## 📦 Installation
+
+This library is hosted on [JitPack](https://jitpack.io).
+
+### 1. Add the JitPack repository
+Add it to your `settings.gradle.kts` file:
+
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+```
+
+### 2. Add the dependency
+Add the following to your module's `build.gradle.kts`:
+
+```kotlin
+dependencies {
+    // Replace 'latest_tag' with the actual version (e.g., 1.0.0)
+    implementation("com.github.BRBXGIT.BrbxMvi:brbx-mvi-api:latest_tag")
+}
+```
+
+---
+
 ## 🚀 Key Features
 
 -   **Logic Delegation:** Break down massive ViewModels into small, testable, and reusable `MviDelegate` components.
@@ -21,14 +50,17 @@
 In BrbxMvi, your ViewModel doesn't have to be a monolith. You can split business logic into **Delegates**.
 
 ### 1. The ViewModel (Container)
-The ViewModel holds the state and acts as the entry point for intents.
+The ViewModel holds the state and acts as the entry point for intents. Delegates are injected via factories to receive the ViewModel's scope.
 
 ```kotlin
 class MyViewModel(
-    private val authDelegate: AuthDelegate // Injected delegate
+    authDelegateFactory: AuthDelegate.Factory
 ) : ContainedMviViewModel<MyState, MyEffect, MyIntent>(
     initialState = MyState()
 ) {
+    // Delegate created using the ViewModel's scope
+    private val authDelegate = authDelegateFactory.create(scope)
+
     override fun dispatchIntent(intent: MyIntent) {
         when (intent) {
             is MyIntent.Auth -> authDelegate.process(intent)
@@ -58,6 +90,10 @@ class AuthDelegate(
         reduce { copy(isLoading = false, user = result) }
         postEffect(MyEffect.ShowToast("Welcome!"))
     }
+    
+    interface Factory {
+        fun create(scope: MviScope<MyState, MyEffect, MyIntent>): AuthDelegate
+    }
 }
 ```
 
@@ -78,17 +114,20 @@ class MyViewModel @Inject constructor(
 ```
 
 ### Koin
-Koin makes it even easier. You can define your delegates and ViewModels in a module:
+Koin allows you to inject delegates directly into your ViewModel using parameters to pass the scope.
 
 ```kotlin
 val myModule = module {
     factory { (scope: MviScope<S, E, I>) -> MyDelegate(scope) }
-    
-    viewModel { 
-        val vm = MyViewModel()
-        val delegate = get { parametersOf(vm.scope) }
-        vm.init(delegate)
-        vm
+    viewModel { MyViewModel() }
+}
+
+class MyViewModel : ContainedMviViewModel<State, Effect, Intent>(...), KoinComponent {
+    // Inject delegate lazily using the ViewModel's scope
+    private val delegate: MyDelegate by inject { parametersOf(scope) }
+
+    override fun dispatchIntent(intent: Intent) {
+        delegate.process(intent)
     }
 }
 ```
@@ -141,28 +180,14 @@ val result = asyncAction { fetchData() }.await()
 
 ---
 
-## 📦 Installation
+## 📄 License
 
-This library is hosted on [JitPack](https://jitpack.io).
+```text
+Copyright 2026 BrbxMvi
 
-### 1. Add the JitPack repository
-Add it to your `settings.gradle.kts` file:
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-```kotlin
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url = uri("https://jitpack.io") }
-    }
-}
-```
-
-### 2. Add the dependency
-Add the following to your module's `build.gradle.kts`:
-
-```kotlin
-dependencies {
-    implementation("com.github.BRBXGIT.BrbxMvi:brbx-mvi-api:latest_tag")
-}
+    http://www.apache.org/licenses/LICENSE-2.0
 ```
