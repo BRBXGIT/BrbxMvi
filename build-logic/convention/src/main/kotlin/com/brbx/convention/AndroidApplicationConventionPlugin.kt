@@ -16,7 +16,7 @@ internal class AndroidApplicationConventionPlugin : Plugin<Project> {
                 configureAndroidCommon(this)
 
                 defaultConfig {
-                    applicationId = "com.brbx.libertyflow"
+                    applicationId = "com.brbx.brbxmvi"
                     targetSdk = 37
                     versionCode = 1
                     versionName = "1.0"

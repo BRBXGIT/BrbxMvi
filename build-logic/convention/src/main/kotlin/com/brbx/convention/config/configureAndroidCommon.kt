@@ -25,4 +25,10 @@ internal fun Project.configureAndroidCommon(
             targetCompatibility = JavaVersions.JavaV
         }
     }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).configureEach {
+        compilerOptions {
+            jvmTarget.set(JavaVersions.JvmV)
+        }
+    }
 }

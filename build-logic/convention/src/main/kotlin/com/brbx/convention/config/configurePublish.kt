@@ -10,8 +10,8 @@ import org.gradle.kotlin.dsl.get
 internal fun Project.configurePublish() {
     pluginManager.apply("maven-publish")
 
-    group = "com.github.BRBXGIT.BRBXDevKit"
-    version = System.getenv("JITPACK_VERSION") ?: "1.0.44-LOCAL"
+    group = "com.github.BRBXGIT.BrbxMvi"
+    version = System.getenv("JITPACK_VERSION") ?: "1.0.0-LOCAL"
 
     // Fix problem with .jar/.kt files on JitPack DO NOT DELETE
     tasks.withType(
@@ -25,7 +25,7 @@ internal fun Project.configurePublish() {
             afterEvaluate {
                 publications.create<MavenPublication>("release") {
                     from(components["release"])
-                    artifactId = project.name
+                    artifactId = project.path.replace(":", "-").removePrefix("-")
                 }
             }
         }
@@ -33,7 +33,7 @@ internal fun Project.configurePublish() {
         pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
             publications.create<MavenPublication>("java") {
                 from(components["java"])
-                artifactId = project.name
+                artifactId = project.path.replace(":", "-").removePrefix("-")
             }
         }
     }
