@@ -3,6 +3,7 @@ package com.brbx.mvicore.helpers
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brbx.mvicore.contracts.MviDelegate
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
@@ -92,9 +93,10 @@ fun <T> Flow<T>.shareInWhileSubscribed(stopTimeoutMillis: Long = 1L): SharedFlow
 context(delegate: MviDelegate<S, E, I>)
 inline fun <S, E, I : Any, T> Flow<T>.collectFlow(
     context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
     crossinline action: suspend MviDelegate<S, E, I>.(T) -> Unit
 ): Job =
-    delegate.launchAction(context = context) {
+    delegate.launchAction(context, start) {
         this@collectFlow.collect { value ->
             delegate.action(value)
         }
@@ -107,12 +109,13 @@ inline fun <S, E, I : Any, T> Flow<T>.collectFlow(
 context(delegate: MviDelegate<S, E, I>)
 inline fun <S, E, I : Any, T> Flow<T>.collectFlowIf(
     condition: Boolean,
-    onElse: () -> Unit = {},
     context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    onElse: () -> Unit = {},
     crossinline action: suspend MviDelegate<S, E, I>.(T) -> Unit
 ): Job? =
     if (condition) {
-        collectFlow(context, action)
+        collectFlow(context, start, action)
     } else {
         onElse()
         null
@@ -132,6 +135,18 @@ inline infix fun <S, E, I : Any, T> Flow<T>.bind(
         }
     }
 
+context(delegate: MviDelegate<S, E, I>)
+inline fun <S, E, I : Any, T> Flow<T>.bind(
+    context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    crossinline reducer: S.(T) -> S,
+): Job =
+    collectFlow(context, start) { value ->
+        reduce {
+            reducer(value)
+        }
+    }
+
 /**
  * Conditionally binds the [Flow] to state updates.
  */
@@ -139,11 +154,13 @@ inline infix fun <S, E, I : Any, T> Flow<T>.bind(
 context(delegate: MviDelegate<S, E, I>)
 inline fun <S, E, I : Any, T> Flow<T>.bindIf(
     condition: Boolean,
+    context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
     onElse: () -> Unit = {},
     crossinline reducer: S.(T) -> S,
 ): Job? =
     if (condition) {
-        bind(reducer)
+        bind(context, start, reducer)
     } else {
         onElse()
         null
@@ -155,9 +172,10 @@ inline fun <S, E, I : Any, T> Flow<T>.bindIf(
 context(delegate: MviDelegate<S, E, I>)
 inline fun <S, E, I : Any, T> Flow<T>.collectFlowLatest(
     context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
     crossinline action: suspend MviDelegate<S, E, I>.(T) -> Unit
 ): Job =
-    delegate.launchAction(context = context) {
+    delegate.launchAction(context, start) {
         this@collectFlowLatest.collectLatest { value ->
             delegate.action(value)
         }
@@ -170,12 +188,13 @@ inline fun <S, E, I : Any, T> Flow<T>.collectFlowLatest(
 context(delegate: MviDelegate<S, E, I>)
 inline fun <S, E, I : Any, T> Flow<T>.collectFlowLatestIf(
     condition: Boolean,
-    onElse: () -> Unit = {},
     context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    onElse: () -> Unit = {},
     crossinline action: suspend MviDelegate<S, E, I>.(T) -> Unit
 ): Job? =
     if (condition) {
-        collectFlow(context, action)
+        collectFlow(context, start, action)
     } else {
         onElse()
         null
@@ -194,6 +213,18 @@ inline infix fun <S, E, I : Any, T> Flow<T>.bindLatest(
         }
     }
 
+context(delegate: MviDelegate<S, E, I>)
+inline fun <S, E, I : Any, T> Flow<T>.bindLatest(
+    context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    crossinline reducer: S.(T) -> S,
+): Job =
+    collectFlowLatest(context, start) { value ->
+        reduce {
+            reducer(value)
+        }
+    }
+
 /**
  * Conditionally binds the [Flow] to state updates using [collectLatest].
  */
@@ -201,11 +232,13 @@ inline infix fun <S, E, I : Any, T> Flow<T>.bindLatest(
 context(delegate: MviDelegate<S, E, I>)
 inline fun <S, E, I : Any, T> Flow<T>.bindLatestIf(
     condition: Boolean,
+    context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
     onElse: () -> Unit = {},
     crossinline reducer: S.(T) -> S,
 ): Job? =
     if (condition) {
-        bindLatest(reducer)
+        bindLatest(context, start, reducer)
     } else {
         onElse()
         null

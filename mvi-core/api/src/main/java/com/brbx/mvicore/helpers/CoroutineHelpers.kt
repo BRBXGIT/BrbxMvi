@@ -1,6 +1,7 @@
 package com.brbx.mvicore.helpers
 
 import com.brbx.mvicore.contracts.MviDelegate
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -15,8 +16,9 @@ import kotlin.coroutines.EmptyCoroutineContext
  */
 inline fun <S, E, I : Any> MviDelegate<S, E, I>.launchAction(
     context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
     crossinline block: suspend () -> Unit,
-): Job = scope.viewModelScope.launch(context = context) { block() }
+): Job = scope.viewModelScope.launch(context, start) { block() }
 
 /**
  * Conditionally launches a coroutine.
@@ -26,10 +28,11 @@ inline fun <S, E, I : Any> MviDelegate<S, E, I>.launchAction(
 @MviApiWithIf
 inline fun <S, E, I : Any> MviDelegate<S, E, I>.launchActionIf(
     condition: Boolean,
-    onElse: () -> Unit = {},
     context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    onElse: () -> Unit = {},
     crossinline block: suspend () -> Unit,
-): Job? = if (condition) launchAction(context, block) else {
+): Job? = if (condition) launchAction(context, start, block) else {
     onElse()
     null
 }
@@ -41,8 +44,9 @@ inline fun <S, E, I : Any> MviDelegate<S, E, I>.launchActionIf(
  */
 inline fun <S, E, I : Any, T> MviDelegate<S, E, I>.asyncAction(
     context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
     crossinline block: suspend () -> T,
-): Deferred<T> = scope.viewModelScope.async(context = context) { block() }
+): Deferred<T> = scope.viewModelScope.async(context, start) { block() }
 
 /**
  * Conditionally creates a [Deferred] value.
@@ -50,10 +54,11 @@ inline fun <S, E, I : Any, T> MviDelegate<S, E, I>.asyncAction(
 @MviApiWithIf
 inline fun <S, E, I : Any, T> MviDelegate<S, E, I>.asyncActionIf(
     condition: Boolean,
-    onElse: () -> Unit = {},
     context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    onElse: () -> Unit = {},
     crossinline block: suspend () -> T,
-): Deferred<T>? = if (condition) asyncAction(context, block) else {
+): Deferred<T>? = if (condition) asyncAction(context, start, block) else {
     onElse()
     null
 }
