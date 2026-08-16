@@ -49,6 +49,8 @@ abstract class MviViewModel<State, Effect, in Intent : Any>(
      */
     open val effects = _effects.shareInLazily()
 
+    protected open val mviScope = mviScope()
+
     /**
      * Updates the current state using the provided [reducer].
      * This is the primary way to perform state transitions.
