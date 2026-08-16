@@ -12,7 +12,6 @@ fun <E> MviDelegate<*, E, *>.postEffect(
 /**
  * Conditionally posts an effect.
  */
-@MviApiWithIf
 fun <E> MviDelegate<*, E, *>.postEffectIf(
     effect: E,
     condition: Boolean,

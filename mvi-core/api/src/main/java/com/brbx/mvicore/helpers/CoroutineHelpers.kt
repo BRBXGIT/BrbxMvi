@@ -25,7 +25,6 @@ inline fun <S, E, I : Any> MviDelegate<S, E, I>.launchAction(
  *
  * If [condition] is true, [block] is executed. Otherwise, [onElse] is called.
  */
-@MviApiWithIf
 inline fun <S, E, I : Any> MviDelegate<S, E, I>.launchActionIf(
     condition: Boolean,
     context: CoroutineContext = EmptyCoroutineContext,
@@ -51,7 +50,6 @@ inline fun <S, E, I : Any, T> MviDelegate<S, E, I>.asyncAction(
 /**
  * Conditionally creates a [Deferred] value.
  */
-@MviApiWithIf
 inline fun <S, E, I : Any, T> MviDelegate<S, E, I>.asyncActionIf(
     condition: Boolean,
     context: CoroutineContext = EmptyCoroutineContext,

@@ -12,7 +12,6 @@ fun <I : Any> MviDelegate<*, *, I>.dispatchIntent(intent: I) {
 /**
  * Conditionally dispatches an intent.
  */
-@MviApiWithIf
 fun <I : Any> MviDelegate<*, *, I>.dispatchIntentIf(
     intent: I,
     condition: Boolean,

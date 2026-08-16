@@ -4,7 +4,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-@OptIn(MviApiWithIf::class)
 internal class EffectHelpersTest {
 
     internal sealed interface TestEffect {

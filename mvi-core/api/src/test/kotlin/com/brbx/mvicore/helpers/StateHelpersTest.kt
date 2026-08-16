@@ -3,7 +3,6 @@ package com.brbx.mvicore.helpers
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-@OptIn(MviApiWithIf::class)
 internal class StateHelpersTest {
 
     internal data class TestState(val count: Int = 0, val text: String = "")

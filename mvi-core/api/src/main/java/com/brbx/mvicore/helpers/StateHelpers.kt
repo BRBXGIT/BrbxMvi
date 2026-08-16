@@ -39,13 +39,12 @@ fun <S, E, I : Any> MviDelegate<S, E, I>.reduce(
 /**
  * Conditionally performs a state reduction.
  */
-@MviApiWithIf
 fun <S, E, I : Any> MviDelegate<S, E, I>.reduceIf(
     condition: Boolean,
-    onElse: () -> Unit = {},
+    onElse: S.() -> S = { this },
     reducer: S.() -> S
 ) {
-    if (condition) reduce(reducer) else onElse()
+    if (condition) reduce(reducer) else reduce(reducer = onElse)
 }
 
 /**

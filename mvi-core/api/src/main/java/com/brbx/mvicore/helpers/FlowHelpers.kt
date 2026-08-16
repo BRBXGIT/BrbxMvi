@@ -105,7 +105,6 @@ inline fun <S, E, I : Any, T> Flow<T>.collectFlow(
 /**
  * Conditionally collects values from the [Flow].
  */
-@MviApiWithIf
 context(delegate: MviDelegate<S, E, I>)
 inline fun <S, E, I : Any, T> Flow<T>.collectFlowIf(
     condition: Boolean,
@@ -150,7 +149,6 @@ inline fun <S, E, I : Any, T> Flow<T>.bind(
 /**
  * Conditionally binds the [Flow] to state updates.
  */
-@MviApiWithIf
 context(delegate: MviDelegate<S, E, I>)
 inline fun <S, E, I : Any, T> Flow<T>.bindIf(
     condition: Boolean,
@@ -184,7 +182,6 @@ inline fun <S, E, I : Any, T> Flow<T>.collectFlowLatest(
 /**
  * Conditionally collects the latest value from the [Flow].
  */
-@MviApiWithIf
 context(delegate: MviDelegate<S, E, I>)
 inline fun <S, E, I : Any, T> Flow<T>.collectFlowLatestIf(
     condition: Boolean,
@@ -228,7 +225,6 @@ inline fun <S, E, I : Any, T> Flow<T>.bindLatest(
 /**
  * Conditionally binds the [Flow] to state updates using [collectLatest].
  */
-@MviApiWithIf
 context(delegate: MviDelegate<S, E, I>)
 inline fun <S, E, I : Any, T> Flow<T>.bindLatestIf(
     condition: Boolean,

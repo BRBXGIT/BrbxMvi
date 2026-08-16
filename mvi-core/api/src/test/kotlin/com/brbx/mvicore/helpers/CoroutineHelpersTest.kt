@@ -6,7 +6,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
 
-@OptIn(MviApiWithIf::class)
 internal class CoroutineHelpersTest {
 
     @Test
