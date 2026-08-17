@@ -12,7 +12,7 @@ internal class IntDelegateImpl(
     override val scope: MviScope<TestState, TestEffect, TestIntent>,
 ) : IntDelegate {
 
-    override fun process(intent: TestIntent.IntIntent) {
+    override fun invoke(intent: TestIntent.IntIntent) {
         when (intent) {
             TestIntent.IntIntent.MinusOne -> minusOne()
             TestIntent.IntIntent.PlusOne -> plusOne()

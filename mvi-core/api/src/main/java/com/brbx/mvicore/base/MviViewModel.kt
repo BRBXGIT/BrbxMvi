@@ -49,6 +49,9 @@ abstract class MviViewModel<State, Effect, in Intent : Any>(
      */
     open val effects = _effects.shareInLazily()
 
+    /**
+     * Internal mvi scope.
+     */
     protected open val mviScope = mviScope()
 
     /**

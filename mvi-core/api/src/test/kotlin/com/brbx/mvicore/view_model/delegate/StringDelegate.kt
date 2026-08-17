@@ -17,7 +17,7 @@ internal class StringDelegateImpl(
     private val dispatcher: CoroutineDispatcher,
 ) : StringDelegate {
 
-    override fun process(intent: TestIntent.StringIntent) {
+    override fun invoke(intent: TestIntent.StringIntent) {
         when (intent) {
             TestIntent.StringIntent.SuspendAddMvi -> addMvi()
             TestIntent.StringIntent.SuspendRemoveMvi -> removeMvi()

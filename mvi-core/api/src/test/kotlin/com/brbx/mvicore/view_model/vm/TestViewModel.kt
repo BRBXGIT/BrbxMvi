@@ -15,8 +15,8 @@ internal class TestViewModel(
 
     override fun dispatchIntent(intent: TestIntent) {
         when (intent) {
-            is TestIntent.IntIntent-> intDelegate.process(intent)
-            is TestIntent.StringIntent -> stringDelegate.process(intent)
+            is TestIntent.IntIntent-> intDelegate(intent)
+            is TestIntent.StringIntent -> stringDelegate(intent)
         }
     }
 }
