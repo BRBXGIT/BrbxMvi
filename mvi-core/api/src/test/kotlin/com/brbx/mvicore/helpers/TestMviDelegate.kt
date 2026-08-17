@@ -22,7 +22,7 @@ internal class TestMviDelegate<S, E, I : Any>(
 
     val intents = mutableListOf<I>()
 
-    override fun process(intent: I) {
+    override fun invoke(intent: I) {
         intents.add(intent)
     }
 
