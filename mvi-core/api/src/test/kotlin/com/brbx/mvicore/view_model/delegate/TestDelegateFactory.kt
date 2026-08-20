@@ -3,10 +3,11 @@ package com.brbx.mvicore.view_model.delegate
 import com.brbx.mvicore.contracts.MviScope
 import com.brbx.mvicore.view_model.vm.TestEffect
 import com.brbx.mvicore.view_model.vm.TestIntent
+import com.brbx.mvicore.view_model.vm.TestScreenEffect
 import com.brbx.mvicore.view_model.vm.TestState
 import kotlinx.coroutines.CoroutineDispatcher
 
-private typealias DelegateMviScope = MviScope<TestState, TestEffect, TestIntent>
+private typealias DelegateMviScope = MviScope<TestState, TestEffect, TestScreenEffect, TestIntent>
 
 internal interface TestDelegateFactory {
 

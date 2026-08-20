@@ -9,13 +9,13 @@ internal class StateHelpersTest {
 
     @Test
     fun `currentState returns actual state from scope`() {
-        val delegate = TestMviDelegate<TestState, Unit, Any>(TestState(count = 5))
+        val delegate = TestMviDelegate<TestState, Unit, Unit, Any>(TestState(count = 5))
         assertEquals(5, delegate.currentState.count)
     }
 
     @Test
     fun `select delegate to currentState property`() {
-        val delegate = TestMviDelegate<TestState, Unit, Any>(TestState(count = 10))
+        val delegate = TestMviDelegate<TestState, Unit, Unit, Any>(TestState(count = 10))
         val count by delegate.select { it.count }
         
         assertEquals(10, count)
@@ -26,21 +26,21 @@ internal class StateHelpersTest {
 
     @Test
     fun `withState provides current state to block`() {
-        val delegate = TestMviDelegate<TestState, Unit, Any>(TestState(count = 7))
+        val delegate = TestMviDelegate<TestState, Unit, Unit, Any>(TestState(count = 7))
         val result = delegate.withState { it.count * 2 }
         assertEquals(14, result)
     }
 
     @Test
     fun `reduce updates state in scope`() {
-        val delegate = TestMviDelegate<TestState, Unit, Any>(TestState(count = 0))
+        val delegate = TestMviDelegate<TestState, Unit, Unit, Any>(TestState(count = 0))
         delegate.reduce { copy(count = 1) }
         assertEquals(1, delegate.currentState.count)
     }
 
     @Test
     fun `reduceIf updates state only when condition is true`() {
-        val delegate = TestMviDelegate<TestState, Unit, Any>(TestState(count = 0))
+        val delegate = TestMviDelegate<TestState, Unit, Unit, Any>(TestState(count = 0))
         
         delegate.reduceIf(condition = false) { copy(count = 1) }
         assertEquals(0, delegate.currentState.count)
@@ -55,14 +55,14 @@ internal class StateHelpersTest {
 
     @Test
     fun `reduceIfType updates state only when type matches`() {
-        val delegate = TestMviDelegate<State, Unit, Any>(TypeA("hello"))
+        val delegate = TestMviDelegate<State, Unit, Unit, Any>(TypeA("hello"))
         
-        delegate.reduceIfType<TypeB, State, Unit, Any> {
+        delegate.reduceIfType<TypeB, State, Unit, Unit, Any> {
             TypeB(valB = 10)
         }
         assertEquals(TypeA("hello"), delegate.currentState)
 
-        delegate.reduceIfType<TypeA, State, Unit, Any> {
+        delegate.reduceIfType<TypeA, State, Unit, Unit, Any> {
             TypeA(valA = "world")
         }
         assertEquals(TypeA("world"), delegate.currentState)

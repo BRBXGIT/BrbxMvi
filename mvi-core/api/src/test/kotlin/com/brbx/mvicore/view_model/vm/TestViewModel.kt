@@ -7,7 +7,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 internal class TestViewModel(
     delegateFactory: TestDelegateFactory,
     dispatcher: CoroutineDispatcher,
-) : ContainedMviViewModel<TestState, TestEffect, TestIntent>(
+) : ContainedMviViewModel<TestState, TestEffect, TestScreenEffect, TestIntent>(
     initialState = TestState(),
 ) {
     private val intDelegate = delegateFactory.createIntDelegate(mviScope = scope)

@@ -13,7 +13,7 @@ internal class EffectHelpersTest {
 
     @Test
     fun `postEffect dispatches effect to scope`() {
-        val delegate = TestMviDelegate<Unit, TestEffect, Any>(Unit)
+        val delegate = TestMviDelegate<Unit, TestEffect, Unit, Any>(Unit)
         delegate.postEffect(TestEffect.Effect1)
         
         assertEquals(1, delegate.scope.postedEffects.size)
@@ -22,7 +22,7 @@ internal class EffectHelpersTest {
 
     @Test
     fun `postEffectIf dispatches effect only when condition is true`() {
-        val delegate = TestMviDelegate<Unit, TestEffect, Any>(Unit)
+        val delegate = TestMviDelegate<Unit, TestEffect, Unit, Any>(Unit)
         
         delegate.postEffectIf(TestEffect.Effect1, condition = false)
         assertTrue(delegate.scope.postedEffects.isEmpty())

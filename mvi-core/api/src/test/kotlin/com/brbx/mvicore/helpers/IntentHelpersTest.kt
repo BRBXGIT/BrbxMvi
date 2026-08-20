@@ -13,7 +13,7 @@ internal class IntentHelpersTest {
 
     @Test
     fun `dispatchIntent sends intent to scope`() {
-        val delegate = TestMviDelegate<Unit, Unit, TestIntent>(Unit)
+        val delegate = TestMviDelegate<Unit, Unit, Unit, TestIntent>(Unit)
         delegate.dispatchIntent(TestIntent.Intent1)
         
         assertEquals(1, delegate.scope.dispatchedIntents.size)
@@ -22,7 +22,7 @@ internal class IntentHelpersTest {
 
     @Test
     fun `dispatchIntentIf sends intent only when condition is true`() {
-        val delegate = TestMviDelegate<Unit, Unit, TestIntent>(Unit)
+        val delegate = TestMviDelegate<Unit, Unit, Unit, TestIntent>(Unit)
         
         delegate.dispatchIntentIf(TestIntent.Intent1, condition = false)
         assertTrue(delegate.scope.dispatchedIntents.isEmpty())

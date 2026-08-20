@@ -6,9 +6,9 @@ package com.brbx.mvicore.contracts
  * Typically implemented by ViewModels or other components that manage an MVI lifecycle,
  * allowing them to expose the scope to external observers or delegates.
  */
-interface MviContainer<State, Effect, in Intent : Any> {
+interface MviContainer<State, Effect, ScreenEffect, in Intent : Any> {
     /**
      * The [MviScope] associated with this container.
      */
-    val scope: MviScope<State, Effect, Intent>
+    val scope: MviScope<State, Effect, ScreenEffect, Intent>
 }

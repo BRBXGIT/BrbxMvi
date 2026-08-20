@@ -14,7 +14,7 @@ internal class FlowHelpersTest {
     @Test
     fun `selectFlow transforms state flow`() = runTest {
         data class State(val x: Int)
-        val delegate = TestMviDelegate<State, Unit, Any>(State(x = 1), viewModelScope = this)
+        val delegate = TestMviDelegate<State, Unit, Unit, Any>(State(x = 1), viewModelScope = this)
         
         delegate.selectFlow { it.x }.test {
             assertEquals(1, awaitItem())
@@ -32,7 +32,7 @@ internal class FlowHelpersTest {
 
     @Test
     fun `collectTask collects values from flow`() = runTest {
-        val delegate = TestMviDelegate<Unit, Unit, Any>(Unit, viewModelScope = this)
+        val delegate = TestMviDelegate<Unit, Unit, Unit, Any>(Unit, viewModelScope = this)
         val flow = flowOf(1, 2, 3)
         val collected = mutableListOf<Int>()
         
@@ -48,7 +48,7 @@ internal class FlowHelpersTest {
 
     @Test
     fun `collectTaskIf collects only if condition is true`() = runTest {
-        val delegate = TestMviDelegate<Unit, Unit, Any>(Unit, viewModelScope = this)
+        val delegate = TestMviDelegate<Unit, Unit, Unit, Any>(Unit, viewModelScope = this)
         val flow = flowOf(1)
         var collected = false
         
@@ -66,7 +66,7 @@ internal class FlowHelpersTest {
     @Test
     fun `bind updates state from flow`() = runTest {
         data class State(val x: Int)
-        val delegate = TestMviDelegate<State, Unit, Any>(State(x = 0), viewModelScope = this)
+        val delegate = TestMviDelegate<State, Unit, Unit, Any>(State(x = 0), viewModelScope = this)
         val flow = flowOf(1, 2, 3)
         
         with(delegate) {
@@ -80,7 +80,7 @@ internal class FlowHelpersTest {
     @Test
     fun `bindIf updates state only if condition is true`() = runTest {
         data class State(val x: Int)
-        val delegate = TestMviDelegate<State, Unit, Any>(State(x = 0), viewModelScope = this)
+        val delegate = TestMviDelegate<State, Unit, Unit, Any>(State(x = 0), viewModelScope = this)
         val flow = flowOf(1)
         
         with(delegate) {
@@ -96,7 +96,7 @@ internal class FlowHelpersTest {
 
     @Test
     fun `collectFlowLatest collects latest values`() = runTest {
-        val delegate = TestMviDelegate<Unit, Unit, Any>(Unit, viewModelScope = this)
+        val delegate = TestMviDelegate<Unit, Unit, Unit, Any>(Unit, viewModelScope = this)
         val flow = flow {
             emit(1)
             delay(50.milliseconds)
@@ -119,7 +119,7 @@ internal class FlowHelpersTest {
 
     @Test
     fun `collectFlowLatestIf collects only if condition is true`() = runTest {
-        val delegate = TestMviDelegate<Unit, Unit, Any>(Unit, viewModelScope = this)
+        val delegate = TestMviDelegate<Unit, Unit, Unit, Any>(Unit, viewModelScope = this)
         val flow = flowOf(1)
         var collected = false
         
@@ -137,7 +137,7 @@ internal class FlowHelpersTest {
     @Test
     fun `bindLatest updates state with latest values`() = runTest {
         data class State(val x: Int)
-        val delegate = TestMviDelegate<State, Unit, Any>(State(x = 0), viewModelScope = this)
+        val delegate = TestMviDelegate<State, Unit, Unit, Any>(State(x = 0), viewModelScope = this)
         val flow = flow {
             emit(1)
             delay(50.milliseconds)
@@ -160,7 +160,7 @@ internal class FlowHelpersTest {
     @Test
     fun `bindLatest updates state from flow`() = runTest {
         data class State(val x: Int)
-        val delegate = TestMviDelegate<State, Unit, Any>(State(x = 0), viewModelScope = this)
+        val delegate = TestMviDelegate<State, Unit, Unit, Any>(State(x = 0), viewModelScope = this)
         val flow = flowOf(1, 2, 3)
         
         with(delegate) {
@@ -174,7 +174,7 @@ internal class FlowHelpersTest {
     @Test
     fun `bindLatestIf updates state only if condition is true`() = runTest {
         data class State(val x: Int)
-        val delegate = TestMviDelegate<State, Unit, Any>(State(x = 0), viewModelScope = this)
+        val delegate = TestMviDelegate<State, Unit, Unit, Any>(State(x = 0), viewModelScope = this)
         val flow = flowOf(1)
         
         with(delegate) {

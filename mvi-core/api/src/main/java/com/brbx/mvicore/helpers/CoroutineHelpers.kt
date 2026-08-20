@@ -14,7 +14,7 @@ import kotlin.coroutines.EmptyCoroutineContext
  *
  * This helper simplifies launching asynchronous actions from delegates.
  */
-inline fun <S, E, I : Any> MviDelegate<S, E, I>.launchAction(
+inline fun <S, E, SE, I : Any> MviDelegate<S, E, SE, I>.launchAction(
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
     crossinline block: suspend () -> Unit,
@@ -25,7 +25,7 @@ inline fun <S, E, I : Any> MviDelegate<S, E, I>.launchAction(
  *
  * If [condition] is true, [block] is executed. Otherwise, [onElse] is called.
  */
-inline fun <S, E, I : Any> MviDelegate<S, E, I>.launchActionIf(
+inline fun <S, E, SE, I : Any> MviDelegate<S, E, SE, I>.launchActionIf(
     condition: Boolean,
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
@@ -41,7 +41,7 @@ inline fun <S, E, I : Any> MviDelegate<S, E, I>.launchActionIf(
  *
  * Use this when you need to compute a value asynchronously and await its result.
  */
-inline fun <S, E, I : Any, T> MviDelegate<S, E, I>.asyncAction(
+inline fun <S, E, SE, I : Any, T> MviDelegate<S, E, SE, I>.asyncAction(
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
     crossinline block: suspend () -> T,
@@ -50,7 +50,7 @@ inline fun <S, E, I : Any, T> MviDelegate<S, E, I>.asyncAction(
 /**
  * Conditionally creates a [Deferred] value.
  */
-inline fun <S, E, I : Any, T> MviDelegate<S, E, I>.asyncActionIf(
+inline fun <S, E, SE, I : Any, T> MviDelegate<S, E, SE, I>.asyncActionIf(
     condition: Boolean,
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,

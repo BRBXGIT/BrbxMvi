@@ -6,7 +6,7 @@ import kotlin.properties.ReadOnlyProperty
 /**
  * Provides quick access to the current state value from the [MviDelegate].
  */
-val <S> MviDelegate<S, *, *>.currentState: S
+val <S> MviDelegate<S, *, *, *>.currentState: S
     get() = scope.state.value
 
 /**
@@ -14,7 +14,7 @@ val <S> MviDelegate<S, *, *>.currentState: S
  *
  * Useful for exposing specific state fields in a clean way.
  */
-fun <S, E, I : Any, T> MviDelegate<S, E, I>.select(
+fun <S, E, SE, I : Any, T> MviDelegate<S, E, SE, I>.select(
     selector: (S) -> T
 ): ReadOnlyProperty<Any?, T> = ReadOnlyProperty { _, _ ->
     selector(currentState)
@@ -23,14 +23,14 @@ fun <S, E, I : Any, T> MviDelegate<S, E, I>.select(
 /**
  * Executes a block of code with the current state.
  */
-inline fun <S, E, I : Any, R> MviDelegate<S, E, I>.withState(
+inline fun <S, E, SE, I : Any, R> MviDelegate<S, E, SE, I>.withState(
     block: (state: S) -> R
 ): R = block(currentState)
 
 /**
  * Performs a state reduction via the [MviDelegate]'s scope.
  */
-fun <S, E, I : Any> MviDelegate<S, E, I>.reduce(
+fun <S, E, SE, I : Any> MviDelegate<S, E, SE, I>.reduce(
     reducer: S.() -> S
 ) {
     scope.reduce(reducer)
@@ -39,7 +39,7 @@ fun <S, E, I : Any> MviDelegate<S, E, I>.reduce(
 /**
  * Conditionally performs a state reduction.
  */
-fun <S, E, I : Any> MviDelegate<S, E, I>.reduceIf(
+fun <S, E, SE, I : Any> MviDelegate<S, E, SE, I>.reduceIf(
     condition: Boolean,
     onElse: S.() -> S = { this },
     reducer: S.() -> S
@@ -52,7 +52,7 @@ fun <S, E, I : Any> MviDelegate<S, E, I>.reduceIf(
  *
  * Particularly useful when dealing with sealed classes for State (e.g., Loading, Success, Error).
  */
-inline fun <reified T : S, S, E, I : Any> MviDelegate<S, E, I>.reduceIfType(
+inline fun <reified T : S, S, E, SE, I : Any> MviDelegate<S, E, SE, I>.reduceIfType(
     crossinline reducer: T.() -> S
 ) {
     reduce {

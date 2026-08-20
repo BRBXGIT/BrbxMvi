@@ -5,6 +5,7 @@ import com.brbx.mvicore.helpers.launchAction
 import com.brbx.mvicore.helpers.reduce
 import com.brbx.mvicore.view_model.vm.TestEffect
 import com.brbx.mvicore.view_model.vm.TestIntent
+import com.brbx.mvicore.view_model.vm.TestScreenEffect
 import com.brbx.mvicore.view_model.vm.TestState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -13,7 +14,7 @@ import kotlin.time.Duration.Companion.milliseconds
 internal interface StringDelegate : TestDelegate<TestIntent.StringIntent>
 
 internal class StringDelegateImpl(
-    override val scope: MviScope<TestState, TestEffect, TestIntent>,
+    override val scope: MviScope<TestState, TestEffect, TestScreenEffect, TestIntent>,
     private val dispatcher: CoroutineDispatcher,
 ) : StringDelegate {
 

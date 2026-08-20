@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlin.coroutines.EmptyCoroutineContext
 
-internal class TestMviDelegate<S, E, I : Any>(
-    override val scope: TestMviScope<S, E, I>
-) : MviDelegate<S, E, I> {
+internal class TestMviDelegate<S, E, SE, I : Any>(
+    override val scope: TestMviScope<S, E, SE, I>
+) : MviDelegate<S, E, SE, I> {
 
     constructor(
         initialState: S,
@@ -26,10 +26,10 @@ internal class TestMviDelegate<S, E, I : Any>(
         intents.add(intent)
     }
 
-    internal class TestMviScope<S, E, I : Any>(
+    internal class TestMviScope<S, E, SE, I : Any>(
         initialState: S,
         override val viewModelScope: CoroutineScope = CoroutineScope(EmptyCoroutineContext)
-    ) : MviScope<S, E, I> {
+    ) : MviScope<S, E, SE, I> {
 
         private val _state = MutableStateFlow(initialState)
         override val state: StateFlow<S> = _state.asStateFlow()
@@ -37,8 +37,12 @@ internal class TestMviDelegate<S, E, I : Any>(
         private val _effects = MutableSharedFlow<E>()
         override val effects: SharedFlow<E> = _effects.asSharedFlow()
 
+        private val _screenEffects = MutableSharedFlow<SE>()
+        override val screenEffects: SharedFlow<SE> = _screenEffects.asSharedFlow()
+
         val dispatchedIntents = mutableListOf<I>()
         val postedEffects = mutableListOf<E>()
+        val postedScreenEffects = mutableListOf<SE>()
 
         override fun reduce(reducer: S.() -> S) {
             _state.value = reducer(_state.value)
@@ -50,8 +54,10 @@ internal class TestMviDelegate<S, E, I : Any>(
 
         override fun postEffect(effect: E) {
             postedEffects.add(effect)
-            // Note: SharedFlow might not collect if not subscribed, 
-            // but we track in postedEffects for verification
+        }
+
+        override fun postScreenEffect(effect: SE) {
+            postedScreenEffects.add(effect)
         }
     }
 }

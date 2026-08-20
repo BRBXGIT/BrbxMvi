@@ -9,15 +9,16 @@ import com.brbx.mvicore.contracts.MviScope
  * This class is used when the ViewModel itself serves as the container for the MVI logic,
  * providing its own [MviScope] to observers or delegates.
  */
-abstract class ContainedMviViewModel<State, Effect, in Intent : Any>(
+abstract class ContainedMviViewModel<State, Effect, ScreenEffect, in Intent : Any>(
     initialState: State,
     effectReplay: Int = 1,
-) : MviViewModel<State, Effect, Intent>(initialState, effectReplay),
-    MviContainer<State, Effect, Intent> {
+    screenEffectReplay: Int = 1,
+) : MviViewModel<State, Effect, ScreenEffect, Intent>(initialState, effectReplay, screenEffectReplay),
+    MviContainer<State, Effect, ScreenEffect, Intent> {
 
     /**
      * The [MviScope] provided by this ViewModel, allowing external components to interact
      * with its state, effects, and intent dispatching.
      */
-    override val scope: MviScope<State, Effect, Intent> = mviScope()
+    override val scope: MviScope<State, Effect, ScreenEffect, Intent> = mviScope()
 }

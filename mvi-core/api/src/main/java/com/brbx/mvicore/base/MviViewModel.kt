@@ -22,9 +22,10 @@ import kotlinx.coroutines.launch
  * @param initialState The initial state of the ViewModel.
  * @param effectReplay The number of effects to replay to new subscribers.
  */
-abstract class MviViewModel<State, Effect, in Intent : Any>(
+abstract class MviViewModel<State, Effect, ScreenEffect, in Intent : Any>(
     initialState: State,
     effectReplay: Int = 1,
+    screenEffectReplay: Int = 1,
 ) : ViewModel() {
 
     /**
@@ -33,9 +34,14 @@ abstract class MviViewModel<State, Effect, in Intent : Any>(
     protected open val _state = MutableStateFlow(value = initialState)
 
     /**
-     * Internal mutable effects flow.
+     * Internal mutable common effects flow.
      */
     protected open val _effects = MutableSharedFlow<Effect>(replay = effectReplay)
+
+    /**
+     * Internal mutable screen effects flow.
+     */
+    protected open val _screenEffects = MutableSharedFlow<ScreenEffect>(replay = screenEffectReplay)
 
     /**
      * Public read-only [StateFlow] of the current state.
@@ -50,6 +56,12 @@ abstract class MviViewModel<State, Effect, in Intent : Any>(
     open val effects = _effects.shareInLazily()
 
     /**
+     * Public read-only [SharedFlow] of screen effects.
+     * Uses [shareInLazily] to manage effect distribution.
+     */
+    open val screenEffects = _screenEffects.shareInLazily()
+
+    /**
      * Updates the current state using the provided [reducer].
      * This is the primary way to perform state transitions.
      */
@@ -62,11 +74,12 @@ abstract class MviViewModel<State, Effect, in Intent : Any>(
      * This scope can be passed to delegates or other components to allow them
      * to interact with the MVI loop.
      */
-    protected open fun mviScope(): MviScope<State, Effect, Intent> =
-        object : MviScope<State, Effect, Intent> {
+    protected open fun mviScope(): MviScope<State, Effect, ScreenEffect, Intent> =
+        object : MviScope<State, Effect, ScreenEffect, Intent> {
             override val viewModelScope: CoroutineScope = this@MviViewModel.viewModelScope
             override val state: StateFlow<State> = this@MviViewModel.state
             override val effects: SharedFlow<Effect> = this@MviViewModel.effects
+            override val screenEffects: SharedFlow<ScreenEffect> = this@MviViewModel.screenEffects
 
             override fun reduce(reducer: State.() -> State) {
                 this@MviViewModel.reduce(reducer)
@@ -78,6 +91,10 @@ abstract class MviViewModel<State, Effect, in Intent : Any>(
 
             override fun postEffect(effect: Effect) {
                 this@MviViewModel.postEffect(effect)
+            }
+
+            override fun postScreenEffect(effect: ScreenEffect) {
+                this@MviViewModel.postScreenEffect(effect)
             }
         }
 
@@ -92,5 +109,12 @@ abstract class MviViewModel<State, Effect, in Intent : Any>(
      */
     open fun postEffect(effect: Effect) {
         viewModelScope.launch { _effects.emit(value = effect) }
+    }
+
+    /**
+     * Posts a one-time [ScreenEffect] to be consumed by the UI.
+     */
+    open fun postScreenEffect(effect: ScreenEffect) {
+        viewModelScope.launch { _screenEffects.emit(value = effect) }
     }
 }

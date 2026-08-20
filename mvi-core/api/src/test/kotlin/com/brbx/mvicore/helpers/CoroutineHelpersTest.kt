@@ -10,7 +10,7 @@ internal class CoroutineHelpersTest {
 
     @Test
     fun `launchTask executes block`() = runTest {
-        val delegate = TestMviDelegate<Unit, Unit, Any>(Unit)
+        val delegate = TestMviDelegate<Unit, Unit, Unit, Any>(Unit)
         var executed = false
         
         val job = delegate.launchAction {
@@ -23,7 +23,7 @@ internal class CoroutineHelpersTest {
 
     @Test
     fun `launchTaskIf executes block only when condition is true`() = runTest {
-        val delegate = TestMviDelegate<Unit, Unit, Any>(Unit)
+        val delegate = TestMviDelegate<Unit, Unit, Unit, Any>(Unit)
         var executedCount = 0
         
         val job1 = delegate.launchActionIf(condition = false) {
@@ -42,7 +42,7 @@ internal class CoroutineHelpersTest {
 
     @Test
     fun `asyncTask returns result from block`() = runTest {
-        val delegate = TestMviDelegate<Unit, Unit, Any>(Unit)
+        val delegate = TestMviDelegate<Unit, Unit, Unit, Any>(Unit)
         
         val deferred = delegate.asyncAction {
             "result"
@@ -53,7 +53,7 @@ internal class CoroutineHelpersTest {
 
     @Test
     fun `asyncTaskIf returns deferred only when condition is true`() = runTest {
-        val delegate = TestMviDelegate<Unit, Unit, Any>(Unit)
+        val delegate = TestMviDelegate<Unit, Unit, Unit, Any>(Unit)
         
         val deferred1 = delegate.asyncActionIf(condition = false) {
             "ignored"

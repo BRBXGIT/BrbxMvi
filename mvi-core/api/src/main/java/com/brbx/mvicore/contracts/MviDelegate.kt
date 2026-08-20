@@ -6,11 +6,11 @@ package com.brbx.mvicore.contracts
  * Unlike [MviContainer], a delegate is expected to actively participate in the MVI loop
  * by providing a [invoke] method to handle intents.
  */
-interface MviDelegate<State, Effect, in Intent : Any> {
+interface MviDelegate<State, Effect, ScreenEffect, in Intent : Any> {
     /**
      * The [MviScope] this delegate operates within.
      */
-    val scope: MviScope<State, Effect, Intent>
+    val scope: MviScope<State, Effect, ScreenEffect, Intent>
 
     /**
      * Processes a specific [intent]. This is often the entry point for business logic
