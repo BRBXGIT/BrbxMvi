@@ -8,6 +8,9 @@ import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
+import org.gradle.kotlin.dsl.withType
+
+import org.gradle.api.publish.tasks.GenerateModuleMetadata
 
 internal fun Project.configurePublish() {
     pluginManager.apply("maven-publish")
@@ -15,14 +18,15 @@ internal fun Project.configurePublish() {
     group = "com.github.BRBXGIT.BrbxMvi"
     version = System.getenv("JITPACK_VERSION") ?: "1.1.0"
 
-    // Fix problem with .jar/.kt files on JitPack DO NOT DELETE
-    tasks.withType(
-        org.gradle.api.publish.tasks.GenerateModuleMetadata::class.java
-    ).configureEach {
+    val baseArtifactId = path
+        .replace(oldValue = ":", newValue = "-").removePrefix("-").ifEmpty { name }
+
+    tasks.withType<GenerateModuleMetadata>().configureEach {
         enabled = false
     }
 
     extensions.configure<PublishingExtension> {
+        // --- Android Library ---
         pluginManager.withPlugin("com.android.library") {
             extensions.configure<LibraryExtension> {
                 publishing {
@@ -35,19 +39,36 @@ internal fun Project.configurePublish() {
             afterEvaluate {
                 publications.create<MavenPublication>("release") {
                     from(components["release"])
-                    artifactId = project.path.replace(":", "-").removePrefix("-")
+                    artifactId = baseArtifactId
                 }
             }
         }
 
+        // --- Kotlin JVM ---
         pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
             extensions.configure<JavaPluginExtension> {
                 withSourcesJar()
                 withJavadocJar()
             }
-            publications.create<MavenPublication>("java") {
-                from(components["java"])
-                artifactId = project.path.replace(":", "-").removePrefix("-")
+            afterEvaluate {
+                publications.create<MavenPublication>("java") {
+                    from(components["java"])
+                    artifactId = baseArtifactId
+                }
+            }
+        }
+
+        // --- Kotlin Multiplatform (KMP) ---
+        pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {
+            tasks.withType<GenerateModuleMetadata>().configureEach {
+                enabled = true
+            }
+            afterEvaluate {
+                publications.withType<MavenPublication>().configureEach {
+                    if (artifactId.startsWith(prefix = name)) {
+                        artifactId = artifactId.replaceFirst(oldValue = name, newValue = baseArtifactId)
+                    }
+                }
             }
         }
     }

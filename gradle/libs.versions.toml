@@ -12,9 +12,9 @@ lifecycleRuntimeKtx = "2.11.0"
 kotlin = "2.4.10"
 
 # Compose
-composeBom = "2026.06.01"
+composeBom = "2026.08.00"
 activityCompose = "1.13.0"
-material3Android = "1.5.0-alpha25"
+material3Android = "1.5.0-alpha26"
 
 # Testing
 coroutines = "1.11.0"
@@ -66,7 +66,7 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 # build-logic
-brbxmvi-android-application = { id = "brbxmvi.android.application" }
-brbxmvi-kotlin-library = { id = "brbxmvi.kotlin.library" }
-brbxmvi-android-library = { id = "brbxmvi.android.library" }
+brbxmvi-android-app = { id = "brbxmvi.android.app" }
+brbxmvi-kmp-library = { id = "brbxmvi.kmp.library" }
+brbxmvi-compose-multiplatform = { id = "brbxmvi.compose.multiplatform" }
 brbxmvi-publish = { id = "brbxmvi.publish" }
