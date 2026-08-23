@@ -20,23 +20,24 @@ kotlin {
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.dokka.gradlePlugin)
 }
 
 gradlePlugin {
     plugins {
-        register("androidApplication") {
-            id = libs.plugins.brbxmvi.android.application.get().pluginId
-            implementationClass = "com.brbx.convention.AndroidApplicationConventionPlugin"
+        register("androidApp") {
+            id = libs.plugins.brbxmvi.android.app.get().pluginId
+            implementationClass = "com.brbx.convention.AndroidAppConventionPlugin"
         }
 
-        register("kotlinLibrary") {
-            id = libs.plugins.brbxmvi.kotlin.library.get().pluginId
-            implementationClass = "com.brbx.convention.KotlinLibraryConventionPlugin"
+        register("kmpLibrary") {
+            id = libs.plugins.brbxmvi.kmp.library.get().pluginId
+            implementationClass = "com.brbx.convention.KmpLibraryConventionPlugin"
         }
 
-        register("androidLibrary") {
-            id = libs.plugins.brbxmvi.android.library.get().pluginId
-            implementationClass = "com.brbx.convention.AndroidLibraryConventionPlugin"
+        register("composeMultiplatform") {
+            id = libs.plugins.brbxmvi.compose.multiplatform.get().pluginId
+            implementationClass = "com.brbx.convention.ComposeMultiplatformConventionPlugin"
         }
 
         register("publish") {

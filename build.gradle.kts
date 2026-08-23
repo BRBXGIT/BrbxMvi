@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     // Android library
     alias(libs.plugins.android.library) apply false
-    // Kotlin jvm (used in kotlin library convention plugin)
+    // Kotlin jvm
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
+    // Dokka
+    alias(libs.plugins.jetbrains.dokka) apply false
 }
