@@ -1,6 +1,7 @@
 package com.brbx.mvi_core.helpers
 
 import com.brbx.mvi_core.contracts.MviDelegate
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
@@ -8,6 +9,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+
+inline val MviDelegate<*, *, *, *>.viewModelScope: CoroutineScope
+    get() = scope.viewModelScope
 
 /**
  * Launches a coroutine within the [MviDelegate]'s viewModelScope.
@@ -18,7 +22,7 @@ inline fun <S, E, SE, I : Any> MviDelegate<S, E, SE, I>.launchAction(
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
     crossinline block: suspend () -> Unit,
-): Job = scope.viewModelScope.launch(context, start) { block() }
+): Job = viewModelScope.launch(context, start) { block() }
 
 /**
  * Conditionally launches a coroutine.
@@ -45,7 +49,7 @@ inline fun <S, E, SE, I : Any, T> MviDelegate<S, E, SE, I>.asyncAction(
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
     crossinline block: suspend () -> T,
-): Deferred<T> = scope.viewModelScope.async(context, start) { block() }
+): Deferred<T> = viewModelScope.async(context, start) { block() }
 
 /**
  * Conditionally creates a [Deferred] value.

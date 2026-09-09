@@ -23,6 +23,15 @@ internal class IntentHelpersTest {
     }
 
     @Test
+    fun `dispatchIntent can dispatch external intent type from specialized delegate`() {
+        val delegate = TestMviDelegate<Unit, Unit, Unit, TestIntent.Intent1>(Unit)
+        delegate.dispatchIntent(TestIntent.Intent2)
+        
+        assertEquals(1, delegate.scope.dispatchedIntents.size)
+        assertEquals(TestIntent.Intent2, delegate.scope.dispatchedIntents.first())
+    }
+
+    @Test
     fun `dispatchIntentIf sends intent only when condition is true`() {
         val delegate = TestMviDelegate<Unit, Unit, Unit, TestIntent>(Unit)
         

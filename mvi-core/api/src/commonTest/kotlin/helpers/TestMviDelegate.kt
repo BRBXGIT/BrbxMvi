@@ -40,7 +40,7 @@ internal class TestMviDelegate<S, E, SE, I : Any>(
         private val _screenEffects = MutableSharedFlow<SE>()
         override val screenEffects: SharedFlow<SE> = _screenEffects.asSharedFlow()
 
-        val dispatchedIntents = mutableListOf<I>()
+        val dispatchedIntents = mutableListOf<Any>()
         val postedEffects = mutableListOf<E>()
         val postedScreenEffects = mutableListOf<SE>()
 
