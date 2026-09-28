@@ -1,6 +1,6 @@
 package com.brbx.mvicore.helpers
 
-import com.brbx.mvi_core.helpers.currentState
+import com.brbx.mvi_core.helpers.state
 import com.brbx.mvi_core.helpers.reduce
 import com.brbx.mvi_core.helpers.reduceIf
 import com.brbx.mvi_core.helpers.reduceIfType
@@ -16,7 +16,7 @@ internal class StateHelpersTest {
     @Test
     fun `currentState returns actual state from scope`() {
         val delegate = TestMviDelegate<TestState, Unit, Unit, Any>(TestState(count = 5))
-        assertEquals(5, delegate.currentState.count)
+        assertEquals(5, delegate.state.count)
     }
 
     @Test
@@ -41,7 +41,7 @@ internal class StateHelpersTest {
     fun `reduce updates state in scope`() {
         val delegate = TestMviDelegate<TestState, Unit, Unit, Any>(TestState(count = 0))
         delegate.reduce { copy(count = 1) }
-        assertEquals(1, delegate.currentState.count)
+        assertEquals(1, delegate.state.count)
     }
 
     @Test
@@ -49,10 +49,10 @@ internal class StateHelpersTest {
         val delegate = TestMviDelegate<TestState, Unit, Unit, Any>(TestState(count = 0))
         
         delegate.reduceIf(condition = false) { copy(count = 1) }
-        assertEquals(0, delegate.currentState.count)
+        assertEquals(0, delegate.state.count)
         
         delegate.reduceIf(condition = true) { copy(count = 2) }
-        assertEquals(2, delegate.currentState.count)
+        assertEquals(2, delegate.state.count)
     }
 
     internal interface State
@@ -66,11 +66,11 @@ internal class StateHelpersTest {
         delegate.reduceIfType<TypeB, State, Unit, Unit, Any> {
             TypeB(valB = 10)
         }
-        assertEquals(TypeA("hello"), delegate.currentState)
+        assertEquals(TypeA("hello"), delegate.state)
 
         delegate.reduceIfType<TypeA, State, Unit, Unit, Any> {
             TypeA(valA = "world")
         }
-        assertEquals(TypeA("world"), delegate.currentState)
+        assertEquals(TypeA("world"), delegate.state)
     }
 }

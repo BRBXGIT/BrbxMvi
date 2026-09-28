@@ -9,7 +9,7 @@ import com.brbx.mvi_core.helpers.collectFlow
 import com.brbx.mvi_core.helpers.collectFlowIf
 import com.brbx.mvi_core.helpers.collectFlowLatest
 import com.brbx.mvi_core.helpers.collectFlowLatestIf
-import com.brbx.mvi_core.helpers.currentState
+import com.brbx.mvi_core.helpers.state
 import com.brbx.mvi_core.helpers.reduce
 import com.brbx.mvi_core.helpers.selectFlow
 import kotlinx.coroutines.delay
@@ -85,7 +85,7 @@ internal class FlowHelpersTest {
             job.join()
         }
         
-        assertEquals(3, delegate.currentState.x)
+        assertEquals(3, delegate.state.x)
     }
 
     @Test
@@ -97,11 +97,11 @@ internal class FlowHelpersTest {
         with(delegate) {
             val job1 = flow.bindIf(condition = false) { copy(x = it) }
             assertEquals(null, job1)
-            assertEquals(0, delegate.currentState.x)
+            assertEquals(0, delegate.state.x)
             
             val job2 = flow.bindIf(condition = true) { copy(x = it) }
             job2?.join()
-            assertEquals(1, delegate.currentState.x)
+            assertEquals(1, delegate.state.x)
         }
     }
 
@@ -165,7 +165,7 @@ internal class FlowHelpersTest {
         }
         
         // Value 1 is cancelled by value 2
-        assertEquals(2, delegate.currentState.x)
+        assertEquals(2, delegate.state.x)
     }
 
     @Test
@@ -179,7 +179,7 @@ internal class FlowHelpersTest {
             job.join()
         }
         
-        assertEquals(3, delegate.currentState.x)
+        assertEquals(3, delegate.state.x)
     }
 
     @Test
@@ -191,11 +191,11 @@ internal class FlowHelpersTest {
         with(delegate) {
             val job1 = flow.bindLatestIf(condition = false) { copy(x = it) }
             assertEquals(null, job1)
-            assertEquals(0, delegate.currentState.x)
+            assertEquals(0, delegate.state.x)
             
             val job2 = flow.bindLatestIf(condition = true) { copy(x = it) }
             job2?.join()
-            assertEquals(1, delegate.currentState.x)
+            assertEquals(1, delegate.state.x)
         }
     }
 }

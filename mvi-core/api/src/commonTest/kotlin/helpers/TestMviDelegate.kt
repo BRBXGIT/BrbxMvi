@@ -1,6 +1,6 @@
 package com.brbx.mvicore.helpers
 
-import com.brbx.mvi_core.contracts.MviDelegate
+import com.brbx.mvi_core.contracts.IntentDelegate
 import com.brbx.mvi_core.contracts.MviScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,7 +13,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 internal class TestMviDelegate<S, E, SE, I : Any>(
     override val scope: TestMviScope<S, E, SE, I>
-) : MviDelegate<S, E, SE, I> {
+) : IntentDelegate<S, E, SE, I> {
 
     constructor(
         initialState: S,

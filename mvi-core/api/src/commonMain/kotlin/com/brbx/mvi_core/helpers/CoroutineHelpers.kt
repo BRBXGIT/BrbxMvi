@@ -18,23 +18,23 @@ inline val MviDelegate<*, *, *, *>.viewModelScope: CoroutineScope
  *
  * This helper simplifies launching asynchronous actions from delegates.
  */
-inline fun <S, E, SE, I : Any> MviDelegate<S, E, SE, I>.launchAction(
+fun <S, E, SE, I : Any> MviDelegate<S, E, SE, I>.launchAction(
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
-    crossinline block: suspend () -> Unit,
-): Job = viewModelScope.launch(context, start) { block() }
+    block: suspend CoroutineScope.() -> Unit,
+): Job = viewModelScope.launch(context, start, block)
 
 /**
  * Conditionally launches a coroutine.
  *
  * If [condition] is true, [block] is executed. Otherwise, [onElse] is called.
  */
-inline fun <S, E, SE, I : Any> MviDelegate<S, E, SE, I>.launchActionIf(
+fun <S, E, SE, I : Any> MviDelegate<S, E, SE, I>.launchActionIf(
     condition: Boolean,
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
     onElse: () -> Unit = {},
-    crossinline block: suspend () -> Unit,
+    block: suspend CoroutineScope.() -> Unit,
 ): Job? = if (condition) launchAction(context, start, block) else {
     onElse()
     null
@@ -45,21 +45,21 @@ inline fun <S, E, SE, I : Any> MviDelegate<S, E, SE, I>.launchActionIf(
  *
  * Use this when you need to compute a value asynchronously and await its result.
  */
-inline fun <S, E, SE, I : Any, T> MviDelegate<S, E, SE, I>.asyncAction(
+fun <S, E, SE, I : Any, T> MviDelegate<S, E, SE, I>.asyncAction(
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
-    crossinline block: suspend () -> T,
-): Deferred<T> = viewModelScope.async(context, start) { block() }
+    block: suspend CoroutineScope.() -> T,
+): Deferred<T> = viewModelScope.async(context, start, block)
 
 /**
  * Conditionally creates a [Deferred] value.
  */
-inline fun <S, E, SE, I : Any, T> MviDelegate<S, E, SE, I>.asyncActionIf(
+fun <S, E, SE, I : Any, T> MviDelegate<S, E, SE, I>.asyncActionIf(
     condition: Boolean,
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
     onElse: () -> Unit = {},
-    crossinline block: suspend () -> T,
+    block: suspend CoroutineScope.() -> T,
 ): Deferred<T>? = if (condition) asyncAction(context, start, block) else {
     onElse()
     null
