@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlin.coroutines.EmptyCoroutineContext
 
 internal class TestMviDelegate<S, E, SE, I : Any>(
-    override val scope: TestMviScope<S, E, SE, I>
+    override val mviScope: TestMviScope<S, E, SE, I>
 ) : IntentDelegate<S, E, SE, I> {
 
     constructor(

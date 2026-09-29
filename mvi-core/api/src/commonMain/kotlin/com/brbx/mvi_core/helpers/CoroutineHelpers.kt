@@ -11,7 +11,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 inline val MviDelegate<*, *, *, *>.viewModelScope: CoroutineScope
-    get() = scope.viewModelScope
+    get() = mviScope.viewModelScope
 
 /**
  * Launches a coroutine within the [MviDelegate]'s viewModelScope.

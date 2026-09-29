@@ -18,8 +18,8 @@ internal class IntentHelpersTest {
         val delegate = TestMviDelegate<Unit, Unit, Unit, TestIntent>(Unit)
         delegate.dispatchIntent(TestIntent.Intent1)
         
-        assertEquals(1, delegate.scope.dispatchedIntents.size)
-        assertEquals(TestIntent.Intent1, delegate.scope.dispatchedIntents.first())
+        assertEquals(1, delegate.mviScope.dispatchedIntents.size)
+        assertEquals(TestIntent.Intent1, delegate.mviScope.dispatchedIntents.first())
     }
 
     @Test
@@ -27,8 +27,8 @@ internal class IntentHelpersTest {
         val delegate = TestMviDelegate<Unit, Unit, Unit, TestIntent.Intent1>(Unit)
         delegate.dispatchIntent(TestIntent.Intent2)
         
-        assertEquals(1, delegate.scope.dispatchedIntents.size)
-        assertEquals(TestIntent.Intent2, delegate.scope.dispatchedIntents.first())
+        assertEquals(1, delegate.mviScope.dispatchedIntents.size)
+        assertEquals(TestIntent.Intent2, delegate.mviScope.dispatchedIntents.first())
     }
 
     @Test
@@ -36,10 +36,10 @@ internal class IntentHelpersTest {
         val delegate = TestMviDelegate<Unit, Unit, Unit, TestIntent>(Unit)
         
         delegate.dispatchIntentIf(TestIntent.Intent1, condition = false)
-        assertTrue(delegate.scope.dispatchedIntents.isEmpty())
+        assertTrue(delegate.mviScope.dispatchedIntents.isEmpty())
         
         delegate.dispatchIntentIf(TestIntent.Intent2, condition = true)
-        assertEquals(1, delegate.scope.dispatchedIntents.size)
-        assertEquals(TestIntent.Intent2, delegate.scope.dispatchedIntents.first())
+        assertEquals(1, delegate.mviScope.dispatchedIntents.size)
+        assertEquals(TestIntent.Intent2, delegate.mviScope.dispatchedIntents.first())
     }
 }

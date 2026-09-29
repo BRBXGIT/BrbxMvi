@@ -10,5 +10,5 @@ interface MviContainer<State, Effect, ScreenEffect, in Intent : Any> {
     /**
      * The [MviScope] associated with this container.
      */
-    val scope: MviScope<State, Effect, ScreenEffect, Intent>
+    val mviScope: MviScope<State, Effect, ScreenEffect, Intent>
 }

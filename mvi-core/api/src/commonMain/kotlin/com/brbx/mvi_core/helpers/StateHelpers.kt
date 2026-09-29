@@ -7,7 +7,7 @@ import kotlin.properties.ReadOnlyProperty
  * Provides quick access to the current state value from the [MviDelegate].
  */
 val <S> MviDelegate<S, *, *, *>.state: S
-    get() = scope.state.value
+    get() = mviScope.state.value
 
 /**
  * Creates a read-only property that selects a portion of the state.
@@ -33,7 +33,7 @@ inline fun <S, E, SE, I : Any, R> MviDelegate<S, E, SE, I>.withState(
 fun <S, E, SE, I : Any> MviDelegate<S, E, SE, I>.reduce(
     reducer: S.() -> S
 ) {
-    scope.reduce(reducer)
+    mviScope.reduce(reducer)
 }
 
 /**

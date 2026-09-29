@@ -18,8 +18,8 @@ internal class EffectHelpersTest {
         val delegate = TestMviDelegate<Unit, TestEffect, Unit, Any>(Unit)
         delegate.postEffect(TestEffect.Effect1)
         
-        assertEquals(1, delegate.scope.postedEffects.size)
-        assertEquals(TestEffect.Effect1, delegate.scope.postedEffects.first())
+        assertEquals(1, delegate.mviScope.postedEffects.size)
+        assertEquals(TestEffect.Effect1, delegate.mviScope.postedEffects.first())
     }
 
     @Test
@@ -27,10 +27,10 @@ internal class EffectHelpersTest {
         val delegate = TestMviDelegate<Unit, TestEffect, Unit, Any>(Unit)
         
         delegate.postEffectIf(TestEffect.Effect1, condition = false)
-        assertTrue(delegate.scope.postedEffects.isEmpty())
+        assertTrue(delegate.mviScope.postedEffects.isEmpty())
         
         delegate.postEffectIf(TestEffect.Effect2, condition = true)
-        assertEquals(1, delegate.scope.postedEffects.size)
-        assertEquals(TestEffect.Effect2, delegate.scope.postedEffects.first())
+        assertEquals(1, delegate.mviScope.postedEffects.size)
+        assertEquals(TestEffect.Effect2, delegate.mviScope.postedEffects.first())
     }
 }

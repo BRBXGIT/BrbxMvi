@@ -10,8 +10,8 @@ internal class TestViewModel(
 ) : ContainedMviViewModel<TestState, TestEffect, TestScreenEffect, TestIntent>(
     initialState = TestState(),
 ) {
-    private val intDelegate = delegateFactory.createIntDelegate(mviScope = scope)
-    private val stringDelegate = delegateFactory.createStringDelegate(mviScope = scope, dispatcher)
+    private val intDelegate = delegateFactory.createIntDelegate(mviScope = mviScope)
+    private val stringDelegate = delegateFactory.createStringDelegate(mviScope = mviScope, dispatcher)
 
     override fun dispatchIntent(intent: TestIntent) {
         when (intent) {

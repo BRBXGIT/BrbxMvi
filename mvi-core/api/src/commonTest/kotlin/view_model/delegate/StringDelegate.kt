@@ -14,7 +14,7 @@ import kotlin.time.Duration.Companion.milliseconds
 internal interface StringDelegate : TestDelegate<TestIntent.StringIntent>
 
 internal class StringDelegateImpl(
-    override val scope: MviScope<TestState, TestEffect, TestScreenEffect, TestIntent>,
+    override val mviScope: MviScope<TestState, TestEffect, TestScreenEffect, TestIntent>,
     private val dispatcher: CoroutineDispatcher,
 ) : StringDelegate {
 

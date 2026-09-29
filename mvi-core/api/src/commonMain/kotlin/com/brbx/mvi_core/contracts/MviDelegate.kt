@@ -9,5 +9,5 @@ interface MviDelegate<State, Effect, ScreenEffect, in Intent : Any> {
     /**
      * The [MviScope] this delegate operates within.
      */
-    val scope: MviScope<State, Effect, ScreenEffect, Intent>
+    val mviScope: MviScope<State, Effect, ScreenEffect, Intent>
 }

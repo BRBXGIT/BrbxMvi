@@ -8,7 +8,7 @@ import com.brbx.mvi_core.contracts.MviScope
  */
 @Suppress("UNCHECKED_CAST")
 fun <I : Any> MviDelegate<*, *, *, *>.dispatchIntent(intent: I) {
-    (scope as MviScope<*, *, *, I>).dispatchIntent(intent)
+    (mviScope as MviScope<*, *, *, I>).dispatchIntent(intent)
 }
 
 /**

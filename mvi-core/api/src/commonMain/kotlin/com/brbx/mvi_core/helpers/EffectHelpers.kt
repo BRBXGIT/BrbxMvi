@@ -7,7 +7,7 @@ import com.brbx.mvi_core.contracts.MviDelegate
  */
 fun <E> MviDelegate<*, E, *, *>.postEffect(
     effect: E,
-) = scope.postEffect(effect)
+) = mviScope.postEffect(effect)
 
 /**
  * Conditionally posts an effect.
@@ -26,7 +26,7 @@ fun <E> MviDelegate<*, E, *, *>.postEffectIf(
  */
 fun <SE> MviDelegate<*, *, SE, *>.postScreenEffect(
     effect: SE,
-) = scope.postScreenEffect(effect)
+) = mviScope.postScreenEffect(effect)
 
 /**
  * Conditionally posts a screen effect.

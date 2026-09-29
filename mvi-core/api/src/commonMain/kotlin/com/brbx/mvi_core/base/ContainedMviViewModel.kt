@@ -20,5 +20,5 @@ abstract class ContainedMviViewModel<State, Effect, ScreenEffect, in Intent : An
      * The [MviScope] provided by this ViewModel, allowing external components to interact
      * with its state, effects, and intent dispatching.
      */
-    override val scope: MviScope<State, Effect, ScreenEffect, Intent> = mviScope()
+    override val mviScope: MviScope<State, Effect, ScreenEffect, Intent> = mviScope()
 }

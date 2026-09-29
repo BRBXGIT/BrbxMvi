@@ -246,4 +246,4 @@ inline fun <S, E, SE, I : Any, T> Flow<T>.bindLatestIf(
  */
 fun <S, E, SE, I : Any, T> MviDelegate<S, E, SE, I>.selectFlow(
     selector: (S) -> T
-): Flow<T> = scope.state.map(transform = selector).distinctUntilChanged()
+): Flow<T> = mviScope.state.map(transform = selector).distinctUntilChanged()
