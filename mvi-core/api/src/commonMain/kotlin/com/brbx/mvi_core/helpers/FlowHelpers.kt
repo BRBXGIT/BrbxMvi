@@ -1,89 +1,14 @@
 package com.brbx.mvi_core.helpers
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.brbx.mvi_core.contracts.MviDelegate
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.flow.stateIn
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
-
-/**
- * Converts a [Flow] to a [StateFlow] that starts eagerly in the [ViewModel]'s scope.
- *
- * This is a shorthand for `stateIn(viewModelScope, SharingStarted.Eagerly, initialValue)`.
- */
-context(viewModel: ViewModel)
-fun <T> Flow<T>.stateInEagerly(initialValue: T): StateFlow<T> =
-    this.stateIn(
-        scope = viewModel.viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = initialValue,
-    )
-
-/**
- * Converts a [Flow] to a [StateFlow] that starts lazily in the [ViewModel]'s scope.
- */
-context(viewModel: ViewModel)
-fun <T> Flow<T>.stateInLazily(initialValue: T): StateFlow<T> =
-    this.stateIn(
-        scope = viewModel.viewModelScope,
-        started = SharingStarted.Lazily,
-        initialValue = initialValue,
-    )
-
-/**
- * Converts a [Flow] to a [StateFlow] that remains active while there are subscribers.
- */
-context(viewModel: ViewModel)
-fun <T> Flow<T>.stateInWhileSubscribed(
-    initialValue: T,
-    stopTimeoutMillis: Long = 1L,
-): StateFlow<T> =
-    this.stateIn(
-        scope = viewModel.viewModelScope,
-        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = stopTimeoutMillis),
-        initialValue = initialValue,
-    )
-
-/**
- * Converts a [Flow] to a [SharedFlow] that starts eagerly in the [ViewModel]'s scope.
- */
-context(viewModel: ViewModel)
-fun <T> Flow<T>.shareInEagerly(): SharedFlow<T> =
-    this.shareIn(
-        scope = viewModel.viewModelScope,
-        started = SharingStarted.Eagerly,
-    )
-
-/**
- * Converts a [Flow] to a [SharedFlow] that starts lazily in the [ViewModel]'s scope.
- */
-context(viewModel: ViewModel)
-fun <T> Flow<T>.shareInLazily(): SharedFlow<T> =
-    this.shareIn(
-        scope = viewModel.viewModelScope,
-        started = SharingStarted.Lazily,
-    )
-
-/**
- * Converts a [Flow] to a [SharedFlow] that remains active while there are subscribers.
- */
-context(viewModel: ViewModel)
-fun <T> Flow<T>.shareInWhileSubscribed(stopTimeoutMillis: Long = 1L): SharedFlow<T> =
-    this.shareIn(
-        scope = viewModel.viewModelScope,
-        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = stopTimeoutMillis),
-    )
 
 /**
  * Collects values from the [Flow] and executes the [action] within the [MviDelegate]'s context.

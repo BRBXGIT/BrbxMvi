@@ -3,13 +3,13 @@ package com.brbx.mvi_core.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brbx.mvi_core.contracts.MviScope
-import com.brbx.mvi_core.helpers.shareInLazily
-import com.brbx.mvi_core.helpers.stateInLazily
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -45,21 +45,18 @@ abstract class MviViewModel<State, Effect, ScreenEffect, in Intent : Any>(
 
     /**
      * Public read-only [StateFlow] of the current state.
-     * Uses [stateInLazily] to ensure the flow is active only when needed.
      */
-    open val state = _state.stateInLazily(initialValue = initialState)
+    open val state = _state.asStateFlow()
 
     /**
      * Public read-only [SharedFlow] of effects.
-     * Uses [shareInLazily] to manage effect distribution.
      */
-    open val effects = _effects.shareInLazily()
+    open val effects = _effects.asSharedFlow()
 
     /**
      * Public read-only [SharedFlow] of screen effects.
-     * Uses [shareInLazily] to manage effect distribution.
      */
-    open val screenEffects = _screenEffects.shareInLazily()
+    open val screenEffects = _screenEffects.asSharedFlow()
 
     /**
      * Updates the current state using the provided [reducer].
