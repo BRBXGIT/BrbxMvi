@@ -1,6 +1,7 @@
 package com.brbx.mvi_core.helpers
 
 import com.brbx.mvi_core.contracts.MviDelegate
+import kotlinx.coroutines.flow.StateFlow
 import kotlin.properties.ReadOnlyProperty
 
 /**
@@ -8,6 +9,12 @@ import kotlin.properties.ReadOnlyProperty
  */
 val <S> MviDelegate<S, *, *, *>.state: S
     get() = mviScope.state.value
+
+/**
+ * Provides quick access to the current state flow from the [MviDelegate].
+ */
+val <S> MviDelegate<S, *, *, *>.stateFlow: StateFlow<S>
+    get() = mviScope.state
 
 /**
  * Creates a read-only property that selects a portion of the state.
